@@ -1,0 +1,46 @@
+html{
+    margin:0px auto;
+
+    max-width: 1200px;
+}
+
+.prContainer{
+    margin-top: 50px;
+}
+
+.prContainer:hover,
+.prContainer:focus {
+
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.prWindow{
+    padding:10px;
+    width: 15%;
+    margin-top:20px;
+    margin-left: 17px;
+    border:solid 1px black;
+    border-radius: 5px;
+    float:left;
+    height: auto;
+}
+
+.prPhoto{
+    margin:8px 0 8px 0;
+    position:relative;
+    border:solid 1px black;
+    width: auto;
+    height: 150px;
+}
+
+.prPrice{
+    float:left;
+}
+
+.prAddtoCartBtn{
+    float:right;
+}
+
+
+
