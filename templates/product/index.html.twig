@@ -2,6 +2,7 @@
 
 
 
+
 {% block body %}
     <!-- The Modal -->
     <div id="myModal" class="modal">
@@ -10,20 +11,20 @@
             <div class="modalHead">
                 <div class="close">&times;</div>
             </div>
-            <div id="modalBox">
+            <div class="modalBox" id="modalBox">
 
             </div>
         </div>
 
     </div>
-    <div class="prContainer">
+    <div class="prContainer" id="prContainer">
     {% for product in products %}
         <div id="prWid{{ product.id }}" class="prWindow" onclick="openModal({{ product.id }})" onmouseout="hoverOne({{ product.id }})" onmouseover="hoverOne({{ product.id }})">
             <div class="prTitle"> <h5>{{ product.name }}</h5></div>
             <div class="prPhoto"></div>
             <div class="prUnderPhoto">
                 <div class="prPrice">{{ product.price }} zł</div>
-                <div class="prAddtoCartBtn"><button>dodaj</button></div>
+                <div class="prAddtoCartBtn"><button onclick="addToCart('{{ product.name }}','2','M','niebieski'); event.stopPropagation();">dodaj</button></div>
             </div>
         </div>
     {% endfor %}
@@ -48,6 +49,20 @@
             xhttp.open("GET", "http://127.0.0.1:8000/product/"+id, false);
             xhttp.send();
             modal.style.display = "block";
+        }
+
+        function addToCart(product, quantity, size, color) {
+            var price = document.getElementById("price");
+            var count = document.getElementById("cartCount");
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    count.innerHTML = +count.innerHTML + +1;
+                }
+            };
+            xhttp.open("GET", "addToCart/"+product+"/"+quantity+"/"+size+"/"+color+"/", false);
+            xhttp.send();
         }
 
         function hoverOne(id){

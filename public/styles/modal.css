@@ -18,7 +18,11 @@
     padding: 20px;
     border: 1px solid #888;
     width: 50%; /* Could be more or less, depending on screen size */
+    height: auto;
+}
 
+.modalBox{
+    height: auto;
 }
 
 /* The Close Button */
@@ -38,11 +42,13 @@
     cursor: pointer;
 }
 
+.productInfo{
+    height: 400px;
+}
+
 .leftSide{
     float:left;
     width:50%;
-
-
 }
 
 .mPrPhoto{

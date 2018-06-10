@@ -1,0 +1,20 @@
+
+{% if not shoppingCart %}
+
+    Koszyk pusty
+
+{% else %}
+
+    {% for shoppingCartItem in shoppingCart %}
+        <div class="cartItem">
+            {{ shoppingCartItem.item }}<br>
+            {{ shoppingCartItem.quantity }}<br>
+            {{ shoppingCartItem.size }}<br>
+            {{ shoppingCartItem.color }}<br><br>
+        </div>
+    {% endfor %}
+
+
+
+{% endif %}
+

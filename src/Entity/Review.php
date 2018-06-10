@@ -37,12 +37,12 @@ class Review
         return $this->id;
     }
 
-    public function getRating(): ?integer
+    public function getRating(): ?int
     {
         return $this->Rating;
     }
 
-    public function setRating(integer $Rating): self
+    public function setRating(int $Rating): self
     {
         $this->Rating = $Rating;
 

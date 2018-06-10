@@ -9,11 +9,11 @@
             <link href="{{ asset('styles/modal.css') }}" rel="stylesheet" >
         {% endblock %}
     </head>
-    <body>
+    <body id="body">
         {% block header %}
             <header>
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="#">Main Page</a>
+                    <a class="navbar-brand" href="http://127.0.0.1:8000/">Main Page</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -21,24 +21,28 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item active">
-                                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                                <a class="nav-link" href="#">Nowości <span class="sr-only">(current)</span></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Link</a>
+                                <a class="nav-link" href="#">Najpopularniejsze</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Dropdown
+                                    Kategorie
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" onclick="getByCategory('T-Shirt')">T-Shirt</a>
+                                    <a class="dropdown-item" onclick="getByCategory('Hoodie')">Hoodie</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Something else here</a>
+                                    <a class="dropdown-item" href="#">Spódnica</a>
                                 </div>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link disabled" href="#">Disabled</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="showShoppingCart()">Koszyk <div id="cartCount">
+                                        {{ app.session.get('shoppingCart')|length }}  </div></a>
                             </li>
                         </ul>
                         <form class="form-inline my-2 my-lg-0">
@@ -49,11 +53,53 @@
                 </nav>
             </header>
         {% endblock %}
+        <div class="shopppingCart" id="shoppingCart"></div>
         {% block body %}{% endblock %}
         {% block footer %}{% endblock %}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+        <script>
+
+            function countCartItems(){
+                var cart = document.getElementsByClassName().length;
+                var count = document.getElementById("cartCount");
+
+                count.innerHTML = cart.toString();
+            }
+
+            countCartItems();
+
+            function showShoppingCart(){
+                var cart = document.getElementById('shoppingCart');
+                if(cart.style.display == 'none'){
+                    cart.style.display = 'block';
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            cart.innerHTML = this.responseText;
+                        }
+                    };
+                    xhttp.open("GET", "http://127.0.0.1:8000/shoppingCart/", false);
+                    xhttp.send();
+                }else{
+                    cart.style.display = 'none';
+                }
+
+            }
+
+            function getByCategory(category){
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("body").innerHTML = this.responseText;
+                    }
+                };
+                xhttp.open("GET", "http://127.0.0.1:8000/products/category/"+category, false);
+                xhttp.send();
+
+            }
+        </script>
         {% block javascripts %}
             {% endblock %}
     </body>

@@ -6,6 +6,7 @@ html{
 
 .prContainer{
     margin-top: 50px;
+
 }
 
 .prContainer:hover,
@@ -24,6 +25,7 @@ html{
     border-radius: 5px;
     float:left;
     height: auto;
+    min-width:185px;
 }
 
 .prPhoto{
@@ -40,6 +42,14 @@ html{
 
 .prAddtoCartBtn{
     float:right;
+}
+
+.shopppingCart{
+    display:none;
+    position:relative;
+    float:right;
+    background-color: blue;
+    width:200px;
 }
 
 

@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Characteristic;
+use App\Entity\Color;
+use App\Entity\Review;
+use App\Entity\Size;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -17,7 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class ProductController extends FOSRestController
 {
     /**
-     * @Rest\Get("/")
+     * @Rest\Get("/", name="main")
      */
     public function getProducts()
     {
@@ -36,11 +41,23 @@ class ProductController extends FOSRestController
     public function getProduct($id)
     {
         $product = $this->getDoctrine()->getRepository(Product::class)->find($id);
+        $productDetails = $this->getDoctrine()->getRepository(Characteristic::class)->findOneBy(['Product' => $id]);
+        $productReviews = $this->getDoctrine()->getRepository(Review::class)->findBy(['Product' => $id]);
+        $productSizes = $this->getDoctrine()->getRepository(Size::class)->findBy(['Characteristic' => $productDetails->getId()]);
+        $productColors = $this->getDoctrine()->getRepository(Color::class)->findBy(['Size' => $productSizes[1]->getId()]);
+
+
 
         if ($product === null) {
-            return new View("Product id: ".$id." doesn't exist", Response::HTTP_NOT_FOUND);
+            return new View("Product id: " . $id . " doesn't exist", Response::HTTP_NOT_FOUND);
         }else{
-            return $this->render('product/product.html.twig', array('product' => $product));
+            return $this->render('product/product.html.twig', array(
+                'product' => $product,
+                'productDetails' => $productDetails,
+                'productReviews' => $productReviews,
+                'productSizes' => $productSizes,
+                'productColors' => $productColors,
+                ));
         }
     }
 
@@ -92,7 +109,7 @@ class ProductController extends FOSRestController
     /**
      * @Rest\Get("products/{id}/reviews/")
      */
-    public function getProductReviews($id)
+    public function getProductReviews()
     {
         $product = $this->getDoctrine()->getRepository(Product::class)->findBy(['Category' => $category]);
 
@@ -133,5 +150,36 @@ class ProductController extends FOSRestController
         $em->flush();
 
         return new View("Product Added Successfully", Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Get("/addToCart/{product}/{quantity}/{size}/{color}/")
+     */
+    public function addToCart($product, $quantity, $size, $color){
+        $session = new Session();
+
+
+        if($session->get('shoppingCart') === null ){
+            $cart = array("0" =>array("item"=>$product, "quantity"=> $quantity, "size"=>$size, "color"=>$color));
+            $session->set('shoppingCart', $cart);
+        }else{
+            $cart = $session->get('shoppingCart');
+            array_push($cart,  array("item"=>$product, "quantity"=>$quantity, "size"=>$size, "color"=>$color));
+
+            $session->set('shoppingCart', $cart);
+
+        }
+        return $this->redirectToRoute('main');
+    }
+
+    /**
+     * @Rest\Get("/shoppingCart/")
+     */
+    public function readCart(Request $request){
+        $session = new Session();
+        $shoppingCart = $session->get('shoppingCart');
+        //$session->remove('shoppingCart');
+        return $this->render('product/shoppingCart.html.twig', array('shoppingCart' => $shoppingCart));
+
     }
 }

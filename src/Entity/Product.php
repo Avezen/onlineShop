@@ -27,9 +27,9 @@ class Product
     private $Description;
 
     /**
-     * @ORM\Column(type="string", length=15, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
-    private $Sex;
+    private $Photo;
 
     /**
      * @ORM\Column(type="string", length=155, nullable=true)
@@ -37,19 +37,9 @@ class Product
     private $Category;
 
     /**
-     * @ORM\Column(type="string", length=155, nullable=true)
-     */
-    private $Brand;
-
-    /**
      * @ORM\Column(type="float")
      */
     private $Price;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $Stock;
 
     /**
      * @ORM\Column(type="date")
@@ -97,14 +87,14 @@ class Product
         return $this;
     }
 
-    public function getSex(): ?string
+    public function getPhoto(): ?string
     {
-        return $this->Sex;
+        return $this->Photo;
     }
 
-    public function setSex(?string $Sex): self
+    public function setPhoto(?string $Photo): self
     {
-        $this->Sex = $Sex;
+        $this->Photo = $Photo;
 
         return $this;
     }
@@ -121,17 +111,6 @@ class Product
         return $this;
     }
 
-    public function getBrand(): ?string
-    {
-        return $this->Brand;
-    }
-
-    public function setBrand(?string $Brand): self
-    {
-        $this->Brand = $Brand;
-
-        return $this;
-    }
 
     public function getPrice(): ?float
     {
@@ -145,17 +124,6 @@ class Product
         return $this;
     }
 
-    public function getStock(): ?integer
-    {
-        return $this->Stock;
-    }
-
-    public function setStock(integer $Stock): self
-    {
-        $this->Stock = $Stock;
-
-        return $this;
-    }
 
     public function getDate(): ?\DateTimeInterface
     {
@@ -169,12 +137,12 @@ class Product
         return $this;
     }
 
-    public function getCharacteristic(): ?Characteristic
+    public function getCharacteristic(): ?Size
     {
         return $this->Characteristic;
     }
 
-    public function setCharacteristic(?Characteristic $Characteristic): self
+    public function setCharacteristic(?Size $Characteristic): self
     {
         $this->Characteristic = $Characteristic;
 

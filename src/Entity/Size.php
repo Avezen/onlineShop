@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SizeRepository")
  */
-class Characteristic
+class Size
 {
     /**
      * @ORM\Id()
@@ -18,9 +18,9 @@ class Characteristic
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="Characteristic")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Characteristic", inversedBy="Size")
      */
-    private $Product;
+    private $Characteristic;
 
     /**
      * @ORM\Column(type="string", length=20)
@@ -41,6 +41,13 @@ class Characteristic
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $SizeThree;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Color", mappedBy="Size")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Color;
 
     public function getId()
     {
@@ -95,4 +102,6 @@ class Characteristic
 
         return $this;
     }
+
+
 }

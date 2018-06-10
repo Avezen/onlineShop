@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Characteristic;
+use App\Entity\Size;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Characteristic|null find($id, $lockMode = null, $lockVersion = null)
- * @method Characteristic|null findOneBy(array $criteria, array $orderBy = null)
- * @method Characteristic[]    findAll()
- * @method Characteristic[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Size|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Size|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Size[]    findAll()
+ * @method Size[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class SizeRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Characteristic::class);
+        parent::__construct($registry, Size::class);
     }
 
 //    /**
-//     * @return Characteristic[] Returns an array of Characteristic objects
+//     * @return Size[] Returns an array of Size objects
 //     */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class SizeRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Characteristic
+    public function findOneBySomeField($value): ?Size
     {
         return $this->createQueryBuilder('s')
             ->andWhere('s.exampleField = :val')
