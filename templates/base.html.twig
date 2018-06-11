@@ -61,30 +61,28 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <script>
 
-            function countCartItems(){
-                var cart = document.getElementsByClassName().length;
-                var count = document.getElementById("cartCount");
 
-                count.innerHTML = cart.toString();
-            }
-
-            countCartItems();
 
             function showShoppingCart(){
                 var cart = document.getElementById('shoppingCart');
-                if(cart.style.display == 'none'){
+
+
+                if (cart.style.display == 'none') {
                     cart.style.display = 'block';
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function() {
-                        if (this.readyState == 4 && this.status == 200) {
-                            cart.innerHTML = this.responseText;
-                        }
-                    };
-                    xhttp.open("GET", "http://127.0.0.1:8000/shoppingCart/", false);
-                    xhttp.send();
-                }else{
+                    if (cart.innerHTML === "") {
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+                                cart.innerHTML = this.responseText;
+                            }
+                        };
+                        xhttp.open("GET", "http://127.0.0.1:8000/shoppingCart/", false);
+                        xhttp.send();
+                    }
+                } else {
                     cart.style.display = 'none';
                 }
+
 
             }
 

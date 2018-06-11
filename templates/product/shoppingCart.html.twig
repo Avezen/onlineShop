@@ -4,17 +4,23 @@
     Koszyk pusty
 
 {% else %}
-
+    {% set i = 0 %}
     {% for shoppingCartItem in shoppingCart %}
         <div class="cartItem">
+
             {{ shoppingCartItem.item }}<br>
-            {{ shoppingCartItem.quantity }}<br>
-            {{ shoppingCartItem.size }}<br>
-            {{ shoppingCartItem.color }}<br><br>
+            Ilość:{{ shoppingCartItem.quantity }}
+            Rozmiar:{{ shoppingCartItem.size }}<br>
+            {{ shoppingCartItem.color }}<br>
+            {{ shoppingCartItem.price*shoppingCartItem.quantity }}<br><br>
         </div>
+        <a href="{{ path('deleteItemFromCart', { 'id': i }) }}" class="btn btn-default">Delete Item</a>
+        {% set i = i + 1 %}
     {% endfor %}
-
-
+    <br><br>
+    Suma: {{ app.session.get('cartPrice') }}
+    <br>
+    <a href="{{ path('clearCart') }}" class="btn btn-default">Clear Cart</a>
 
 {% endif %}
 

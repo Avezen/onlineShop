@@ -153,20 +153,26 @@ class ProductController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/addToCart/{product}/{quantity}/{size}/{color}/")
+     * @Rest\Get("/addToCart/{product}/{quantity}/{size}/{color}/{price}")
      */
-    public function addToCart($product, $quantity, $size, $color){
+    public function addToCart($product, $quantity, $size, $color, $price){
         $session = new Session();
 
 
         if($session->get('shoppingCart') === null ){
-            $cart = array("0" =>array("item"=>$product, "quantity"=> $quantity, "size"=>$size, "color"=>$color));
+            $cart = array("0" =>array("item"=>$product, "quantity"=> $quantity, "size"=>$size, "color"=>$color, "price"=>$price));
             $session->set('shoppingCart', $cart);
+
+            $session->set('cartPrice', $price * $quantity);
         }else{
             $cart = $session->get('shoppingCart');
-            array_push($cart,  array("item"=>$product, "quantity"=>$quantity, "size"=>$size, "color"=>$color));
+            $cartPrice = $session->get('cartPrice');
+
+            array_push($cart,  array("item"=>$product, "quantity"=>$quantity, "size"=>$size, "color"=>$color, "price"=>$price));
 
             $session->set('shoppingCart', $cart);
+
+            $session->set('cartPrice', $cartPrice + $price*$quantity);
 
         }
         return $this->redirectToRoute('main');
@@ -180,6 +186,38 @@ class ProductController extends FOSRestController
         $shoppingCart = $session->get('shoppingCart');
         //$session->remove('shoppingCart');
         return $this->render('product/shoppingCart.html.twig', array('shoppingCart' => $shoppingCart));
+
+    }
+
+    /**
+     * @Rest\Get("/shoppingCart/clear/", name="clearCart")
+     */
+    public function clearCart(){
+        $session = new Session();
+
+        $session->remove('shoppingCart');
+
+        return $this->redirectToRoute('main');
+
+    }
+
+    /**
+     * @Rest\Get("/shoppingCart/delete/{id}", name="deleteItemFromCart")
+     */
+    public function deleteFromCart($id){
+        $session = new Session();
+
+        $cart = $session->get('shoppingCart');
+        $cartPrice = $session->get('cartPrice');
+
+        $quantity = $cart[$id]["quantity"];
+        $price = $cart[$id]["price"];
+        $session->set('cartPrice', $cartPrice - $quantity*$price);
+
+        array_splice($cart,$id,1);
+        $session->set('shoppingCart',$cart);
+
+        return $this->redirectToRoute('main');
 
     }
 }

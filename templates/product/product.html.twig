@@ -11,7 +11,12 @@
         <br><br>
         Dostępne rozmiary:
         {% for productSize in productSizes %}
-        {{ productSize.name }}
+        <label class="labl">
+            <input class="sizeRadio" type="radio" name="radioname" value="{{ productSize.name }}"/>
+            <div>
+                {{ productSize.name }}
+            </div>
+        </label>
         {% endfor %}
         <br>
         Dostępne kolory:
@@ -19,9 +24,11 @@
             {{ productColor.Color }}
         {% endfor %}
         <br>
+        <input type="number" id="quantityOf{{ product.id }}" value="1">
         <div id="price" class="mPrPrice" style="float:left">{{ product.price }} zł </div>
         <div style="clear:both"></div>
-        <button type="button" onclick="addToCart({{ product.name }},2,'M','Niebieski')">dodaj do koszyka</button>
+        <button id="addToCartButton" onclick="addToCart('{{ product.id }}','{{ product.name }}', getQuantity({{ product.id }}),findCheckedSize(),'niebieski', {{ product.price }}); event.stopPropagation()">dodaj do koszyka</button>
+        <div class="successfullyAdded" id="successfullyAdded{{ product.id }}" style="display:none">Pomyślnie dodano produkt</div>
     </div>
 </div>
 
@@ -36,16 +43,63 @@
 </div>
 
 <script>
-    function addToCart(product, quantity, size, color) {
-        var price = document.getElementById("price");
+    function addToCart(id, productName, quantity, size, color, price) {
         var count = document.getElementById("cartCount");
+
+        if(id === null || productName === null || quantity === null || size === null || color === null || price === null)
+        {
+
+        }else {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    count.innerHTML = +count.innerHTML + +1;
+                    addToCartSuccessMsg(id);
+                }
+            };
+            xhttp.open("GET", "addToCart/" + productName + "/" + quantity + "/" + size + "/" + color + "/" + price + "/", false);
+            xhttp.send();
+
+            updateCart();
+        }
+
+    }
+
+    function addToCartSuccessMsg(id){
+        var successMsg = document.getElementById("successfullyAdded"+id);
+
+        successMsg.style.display = "block";
+        setTimeout(function(){successMsg.style.display = "none"},3000)
+    }
+
+    function updateCart(){
+        var cart = document.getElementById('shoppingCart');
+
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                count.innerHTML = "1";
+                cart.innerHTML = this.responseText;
             }
         };
-        xhttp.open("GET", "addToCart/Koszulkaaaaxd/1/M/Czerwony/", false);
+        xhttp.open("GET", "http://127.0.0.1:8000/shoppingCart/", false);
         xhttp.send();
+    }
+
+    function findCheckedSize(){
+        var checkedValue = null;
+        var inputElements = document.getElementsByClassName('sizeRadio');
+        for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                checkedValue = inputElements[i].value;
+                break;
+            }
+        }
+        return checkedValue;
+    }
+
+    function getQuantity(id) {
+        var quantity = document.getElementById("quantityOf"+id).value;
+
+        return quantity;
     }
 </script>
