@@ -31,8 +31,8 @@
                                     Kategorie
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" onclick="getByCategory('T-Shirt')">T-Shirt</a>
-                                    <a class="dropdown-item" onclick="getByCategory('Hoodie')">Hoodie</a>
+                                    <a class="dropdown-item" href="{{ path('productsCategory', {'category':'T-Shirt'}) }}">T-Shirt</a>
+                                    <a class="dropdown-item" href="{{ path('productsCategory', {'category':'Hoodie'}) }}">Hoodie</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#">Spódnica</a>
                                 </div>
@@ -76,27 +76,14 @@
                                 cart.innerHTML = this.responseText;
                             }
                         };
-                        xhttp.open("GET", "http://127.0.0.1:8000/shoppingCart/", false);
+                        xhttp.open("GET", "{{ path('shoppingCart') }}", false);
                         xhttp.send();
                     }
                 } else {
                     cart.style.display = 'none';
                 }
-
-
             }
 
-            function getByCategory(category){
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        document.getElementById("body").innerHTML = this.responseText;
-                    }
-                };
-                xhttp.open("GET", "http://127.0.0.1:8000/products/category/"+category, false);
-                xhttp.send();
-
-            }
         </script>
         {% block javascripts %}
             {% endblock %}

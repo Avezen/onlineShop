@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Size;
+use App\Entity\Product\Size;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

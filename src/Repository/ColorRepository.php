@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Color;
+use App\Entity\Product\Color;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

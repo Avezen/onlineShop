@@ -40,13 +40,18 @@
 
         // When the user clicks on the button, open the modal
         function openModal(id) {
+            var url = "{{ path('product', { 'id': 'idJS' }) }}";
+
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById("modalBox").innerHTML = this.responseText;
                 }
             };
-            xhttp.open("GET", "http://127.0.0.1:8000/product/"+id, false);
+
+            url = url.replace("idJS", id);
+
+            xhttp.open("GET", url, false);
             xhttp.send();
             modal.style.display = "block";
         }
@@ -66,7 +71,15 @@
                         addToCartSuccessMsg(id);
                     }
                 };
-                xhttp.open("GET", "addToCart/" + productName + "/" + quantity + "/" + size + "/" + color + "/" + price + "/", false);
+                var url = "{{ path('addToCart', {'id':'idJS', 'product': 'productJS','quantity': 'quantityJS', 'size': 'sizeJS', 'color':'colorJS', 'price':'priceJS'})|escape('js') }}";
+                url = url.replace("idJS", id);
+                url = url.replace("productJS", productName);
+                url = url.replace("quantityJS", quantity);
+                url = url.replace("sizeJS", size);
+                url = url.replace("colorJS", color);
+                url = url.replace("priceJS", price);
+                xhttp.open("GET", url, false);
+
                 xhttp.send();
 
                 updateCart();
@@ -92,7 +105,41 @@
                     cart.innerHTML = this.responseText;
                 }
             };
-            xhttp.open("GET", "http://127.0.0.1:8000/shoppingCart/", false);
+            xhttp.open("GET", "{{ path('shoppingCart') }}", false);
+            xhttp.send();
+        }
+
+        function deleteItemFromCart(id) {
+            var cart = document.getElementById('shoppingCart');
+            var url = "{{ path('deleteItemFromCart', { 'id': 'idJS' }) }}";
+            var cartItemsCount = document.getElementById('cartCount');
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    cart.innerHTML = this.responseText;
+                    cartItemsCount.innerHTML = (+cartItemsCount.innerHTML - +1).toString();
+                }
+            };
+
+            url = url.replace("idJS", id);
+
+            xhttp.open("GET", url, false);
+            xhttp.send();
+        }
+
+        function clearCart(){
+            var cart = document.getElementById('shoppingCart');
+            var cartItemsCount = document.getElementById('cartCount');
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    cart.innerHTML = this.responseText;
+                    cartItemsCount.innerHTML = "0";
+                }
+            };
+            xhttp.open("GET", "{{ path('clearCart') }}", false);
             xhttp.send();
         }
 

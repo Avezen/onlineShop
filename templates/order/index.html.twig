@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+    <div class="yourCart">
+        Twoje zamówienie:<br>
+        <table>
+            <tr>
+                <td>Nr</td>
+                <td>Nazwa</td>
+                <td>Ilość</td>
+                <td>Rozmiar</td>
+                <td>Kolor</td>
+            </tr>
+            {% set i = 1 %}
+        {% for cartItem in app.session.get('shoppingCart') %}
+            <tr>
+                <td>{{ cartItem.id }}</td>
+                <td>{{ cartItem.item }}</td>
+                <td>{{ cartItem.quantity }}</td>
+                <td>{{ cartItem.size }}</td>
+                <td>{{ cartItem.color }}</td>
+            </tr>
+            {% set i = i + 1 %}
+        {% endfor %}
+        </table>
+    </div>
+    <div class="orderProgress">
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function updateCart(){
+            var cart = document.getElementById('yourCart');
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    cart.innerHTML = this.responseText;
+                }
+            };
+            xhttp.open("GET", "{{ path('cartList') }}", false);
+            xhttp.send();
+        }
+    </script>
+{% endblock %}

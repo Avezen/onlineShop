@@ -14,13 +14,16 @@
             {{ shoppingCartItem.color }}<br>
             {{ shoppingCartItem.price*shoppingCartItem.quantity }}<br><br>
         </div>
-        <a href="{{ path('deleteItemFromCart', { 'id': i }) }}" class="btn btn-default">Delete Item</a>
+        <button onclick="deleteItemFromCart({{ i }})">Usuń</button>
         {% set i = i + 1 %}
     {% endfor %}
     <br><br>
     Suma: {{ app.session.get('cartPrice') }}
     <br>
-    <a href="{{ path('clearCart') }}" class="btn btn-default">Clear Cart</a>
+    <button onclick="clearCart()">Opróżnij koszyk</button>
+    <a href="{{ path('makingOrder') }}"><button>Przejdź do zamówienia</button></a>
 
 {% endif %}
+
+
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Product;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,9 +18,9 @@ class Size
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Characteristic", inversedBy="Size")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product\Product", inversedBy="Size")
      */
-    private $Characteristic;
+    private $Product;
 
     /**
      * @ORM\Column(type="string", length=20)
@@ -44,7 +44,7 @@ class Size
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Color", mappedBy="Size")
+     * @ORM\OneToMany(targetEntity="App\Entity\Product\Color", mappedBy="Size")
      * @ORM\JoinColumn(nullable=false)
      */
     private $Color;
@@ -103,5 +103,16 @@ class Size
         return $this;
     }
 
+    public function getColor(): ?Color
+    {
+        return $this->Color;
+    }
+
+    public function setSize(?Color $Color): self
+    {
+        $this->Color = $Color;
+
+        return $this;
+    }
 
 }

@@ -1,4 +1,4 @@
-<div class="modalNav"> {{ productDetails.sex }}>{{ product.category }}>{{ productDetails.brand }} </div>
+<div class="modalNav"> {{ product.sex }}>{{ product.category }}>{{ product.brand }} </div>
 <div class="productInfo">
     <div class="leftSide">
         <div class="mPrPhoto"></div>
@@ -42,64 +42,3 @@
     {% endif %}
 </div>
 
-<script>
-    function addToCart(id, productName, quantity, size, color, price) {
-        var count = document.getElementById("cartCount");
-
-        if(id === null || productName === null || quantity === null || size === null || color === null || price === null)
-        {
-
-        }else {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    count.innerHTML = +count.innerHTML + +1;
-                    addToCartSuccessMsg(id);
-                }
-            };
-            xhttp.open("GET", "addToCart/" + productName + "/" + quantity + "/" + size + "/" + color + "/" + price + "/", false);
-            xhttp.send();
-
-            updateCart();
-        }
-
-    }
-
-    function addToCartSuccessMsg(id){
-        var successMsg = document.getElementById("successfullyAdded"+id);
-
-        successMsg.style.display = "block";
-        setTimeout(function(){successMsg.style.display = "none"},3000)
-    }
-
-    function updateCart(){
-        var cart = document.getElementById('shoppingCart');
-
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                cart.innerHTML = this.responseText;
-            }
-        };
-        xhttp.open("GET", "http://127.0.0.1:8000/shoppingCart/", false);
-        xhttp.send();
-    }
-
-    function findCheckedSize(){
-        var checkedValue = null;
-        var inputElements = document.getElementsByClassName('sizeRadio');
-        for(var i=0; inputElements[i]; ++i){
-            if(inputElements[i].checked){
-                checkedValue = inputElements[i].value;
-                break;
-            }
-        }
-        return checkedValue;
-    }
-
-    function getQuantity(id) {
-        var quantity = document.getElementById("quantityOf"+id).value;
-
-        return quantity;
-    }
-</script>

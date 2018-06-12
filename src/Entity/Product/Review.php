@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Product;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,7 +17,7 @@ class Review
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="Review")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product\Product", inversedBy="Review")
      */
     private $Product;
 

@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Characteristic;
+use App\Entity\Product\Characteristic;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

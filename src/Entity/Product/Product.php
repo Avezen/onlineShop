@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Product;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -42,18 +42,39 @@ class Product
     private $Price;
 
     /**
+     * @ORM\Column(type="string", length=35)
+     */
+    private $Brand;
+
+    /**
+     * @ORM\Column(type="string", length=15, nullable=true)
+     */
+    private $Sex;
+
+    /**
+     * @ORM\Column(type="string", length=55)
+     */
+    private $Origin;
+
+    /**
+     * @ORM\Column(type="string", length=150)
+     */
+    private $materials;
+
+
+    /**
      * @ORM\Column(type="date")
      */
     private $Date;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Characteristic", mappedBy="Product")
+     * @ORM\OneToMany(targetEntity="App\Entity\Product\Size", mappedBy="Product")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Characteristic;
+    private $Size;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="Product")
+     * @ORM\OneToMany(targetEntity="App\Entity\Product\Review", mappedBy="Product")
      * @ORM\JoinColumn(nullable=false)
      */
     private $Review;
@@ -124,6 +145,54 @@ class Product
         return $this;
     }
 
+    public function getBrand(): ?string
+    {
+        return $this->Brand;
+    }
+
+    public function setBrand(string $Brand): self
+    {
+        $this->Brand = $Brand;
+
+        return $this;
+    }
+
+    public function getSex(): ?string
+    {
+        return $this->Sex;
+    }
+
+    public function setSex(?string $Sex): self
+    {
+        $this->Sex = $Sex;
+
+        return $this;
+    }
+
+    public function getOrigin(): ?string
+    {
+        return $this->Origin;
+    }
+
+    public function setOrigin(string $Origin): self
+    {
+        $this->Origin = $Origin;
+
+        return $this;
+    }
+
+    public function getMaterials(): ?string
+    {
+        return $this->materials;
+    }
+
+    public function setMaterials(string $materials): self
+    {
+        $this->materials = $materials;
+
+        return $this;
+    }
+
 
     public function getDate(): ?\DateTimeInterface
     {
@@ -137,14 +206,14 @@ class Product
         return $this;
     }
 
-    public function getCharacteristic(): ?Size
+    public function getSize(): ?Size
     {
-        return $this->Characteristic;
+        return $this->Size;
     }
 
-    public function setCharacteristic(?Size $Characteristic): self
+    public function setSize(?Size $Size): self
     {
-        $this->Characteristic = $Characteristic;
+        $this->Size = $Size;
 
         return $this;
     }
