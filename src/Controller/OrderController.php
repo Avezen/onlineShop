@@ -4,6 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Order\Address;
 use App\Entity\Order\DeliveryMethod;
+use App\Entity\Order\Orders;
+use App\Entity\Order\OrderDetails;
+use App\Entity\Order\PackageMethod;
+use App\Entity\Product\Color;
+use App\Entity\Product\Product;
+use App\Entity\Product\Size;
+use Doctrine\Common\Util\ClassUtils;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,19 +31,70 @@ class OrderController extends FOSRestController
     public function makeOrder(Request $request){
         // Tutaj ma być pobranie danych z sesji na temat wózka, na podstawie których wyślemy requesty po szczegóły o produktach
         // i przekazemy tablice z tymi danymi do render()
+        $session = new Session();
 
-        return $this->render('order/index.html.twig');
+        $cart = $session->get('shoppingCart');
+        $products = array($this->getDoctrine()->getRepository(Product::class)->findOneBy(["id"=>$cart[0]["id"]]));
 
+        $sizes = array($this->getDoctrine()->getRepository(Size::class)->findOneBy(
+                [
+                    "Name" => $cart[0]["size"],
+                    "Product" => $cart[0]["id"],
+                ]
+        ));
+
+        $colors = array($this->getDoctrine()->getRepository(Color::class)->findOneBy(
+            [
+                "Color" => $cart[0]["color"],
+                "Size" => $sizes[0],
+            ]
+        ));
+        for($i = 1; $i< count($cart); $i++) {
+
+            array_push($products, $this->getDoctrine()->getRepository(Product::class)->findOneBy(["id" => $cart[$i]["id"]]) );
+            array_push($sizes, $this->getDoctrine()->getRepository(Size::class)->findOneBy(
+                [
+                    "Name" => $cart[$i]["size"],
+                    "Product" => $cart[$i]["id"],
+                ]
+            ));
+            array_push($colors, $this->getDoctrine()->getRepository(Color::class)->findOneBy(
+                [
+                    "Color" => $cart[$i]["color"],
+                    "Size" => $sizes[$i],
+                ]
+            ));
+        }
+        return $this->render('order/index.html.twig', ["products" => $products, "sizes" => $sizes, "colors" => $colors]);
+        //return ["products" => $products, "sizes" => $sizes, "products" => $colors];
     }
 
+    /**
+     * @Rest\Get("/testMethod/", name="testMethod")
+     */
+    public function testMethod(){
+        $packageMethods = $this->getDoctrine()->getRepository(PackageMethod::class)->findAll();
+        $deliveryMethods = $this->getDoctrine()->getRepository(DeliveryMethod::class)->findAll();
+
+
+
+
+        return $this->render('order/test.html.twig', array("deliveryMethods"=>$deliveryMethods));
+    }
 
     /**
      * @Rest\Post("/setAddress/", name="setAddress")
      */
     public function setAddress(Request $request){
         $session = new Session();
+        $deliveryMethods = new DeliveryMethod();
+
+        $deliveryMethods = $this->getDoctrine()->getRepository(DeliveryMethod::class)->findAll();
+
 
         $data = new Address();
+
+
         $country = $request->get('_country');
         $postalCode = $request->get('_postalcode');
         $city = $request->get('_city');
@@ -53,47 +111,87 @@ class OrderController extends FOSRestController
         $data->setCity($city);
         $data->setStreetNr($streetNr);
 
-        /*
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($data);
-                $em->flush();
-        */
+
 
         $session->set('address', $data);
 
-        return $this->render('order/deliveryMethod.html.twig');
+        return $this->render('order/deliveryMethod.html.twig', array('deliveryMethods' => $deliveryMethods));
 
     }
 
 
     /**
-     * @Rest\Get("/setDeliveryMethod/{name}/{price}/{packageMethod}", name="setDeliveryMethod")
+     * @Rest\Get("/setDeliveryMethod/{packageMethod}", name="setDeliveryMethod")
      */
-    public function setDeliveryMethod($name, $price, $packageMethod){
+    public function setDeliveryMethod($packageMethod){
         $session = new Session();
 
-        $data = new DeliveryMethod();
-        $data ->setName($name);
-        $data ->setPrice($price);
-        $data ->setPackageMethod($packageMethod);
 
-
-        $session->set('deliveryMethod', $data);
+        $session->set('deliveryMethod', $packageMethod);
 
         return $this->render('order/setPaymentMethod.html.twig');
 
     }
 
     /**
-     * @Rest\Get("/setPaymentMethod/", name="setPaymentMethod")
+     * @Rest\Get("/setPaymentMethod/{paymentMethod}", name="setPaymentMethod")
      */
-    public function setPaymentMethod(Request $request){
+    public function setPaymentMethod($paymentMethod){
         $session = new Session();
 
+        $session->set('paymentMethod', $paymentMethod);
+
+        return $this->render('order/finishOrder.html.twig');
+
+    }
+
+    /**
+    * @Rest\Post("/finalizeOrder/", name="finalizeOrder")
+    */
+    public function finalizeOrder(){
+        $session = new Session();
+
+        $order = new Orders();
+
+        $address = $session->get('address');
+        $paymentMethod = $session->get('paymentMethod');
+        $cart = $session->get('shoppingCart');
+
+        $packageMethod = $this->getDoctrine()->getRepository(PackageMethod::class)->findOneBy(["id"=>$session->get('deliveryMethod')]);
 
 
-        $session->set('paymentMethod');
-        return $this->render('order/cartList.html.twig', array('shoppingCart' => $shoppingCart));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($address);
+        $order->setPackageMethod($packageMethod);
+        $order->setPaymentMethod($paymentMethod);
+        $order->setStatus("Zamówiono");
+        $order->setAddress($address);
+
+
+        $em->persist($order);
+        $em->flush();
+
+
+        for($i=0; $i<count($cart); $i++){
+            $orderDetails = new OrderDetails();
+
+            $orderDetails->setColor($cart[$i]["color"]);
+            $orderDetails->setSize($cart[$i]["size"]);
+            $orderDetails->setQuantity($cart[$i]["quantity"]);
+            $orderDetails->setProductId($cart[$i]["id"]);
+            $orderDetails->setOrder($order);
+            $em->persist($orderDetails);
+            $em->flush();
+
+
+
+        }
+
+
+
+
+        return $this->render('order/finishOrder.html.twig');
 
     }
 }

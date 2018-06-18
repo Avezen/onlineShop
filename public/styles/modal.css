@@ -85,3 +85,37 @@
     background-color: #ffd6bb;
     border: 1px solid #ff6600;
 }
+
+.deliveryMethod {
+    display : block;
+    width: 60px;
+}
+.deliveryMethod > input{ /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+}
+.deliveryMethod > input + div{ /* DIV STYLES */
+    cursor:pointer;
+    border:2px solid transparent;
+}
+.deliveryMethod > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
+    background-color: blue;
+    border: 1px solid #ff6600;
+}
+
+.paymentMethod {
+    display : block;
+    width: 60px;
+}
+.paymentMethod > input{ /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+}
+.paymentMethod > input + div{ /* DIV STYLES */
+    cursor:pointer;
+    border:2px solid transparent;
+}
+.paymentMethod > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
+    background-color: blue;
+    border: 1px solid #ff6600;
+}

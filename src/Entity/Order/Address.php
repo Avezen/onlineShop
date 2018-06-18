@@ -17,7 +17,7 @@ class Address
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Order\Order", inversedBy="Address")
+     * @ORM\OneToOne(targetEntity="App\Entity\Order\Orders", inversedBy="Address")
      */
     private $Order;
 
@@ -94,12 +94,12 @@ class Address
         return $this;
     }
 
-    public function getOrder(): ?Order
+    public function getOrder(): ?Orders
     {
         return $this->Order;
     }
 
-    public function setOrder(?Order $Order): self
+    public function setOrder(?Orders $Order): self
     {
         $this->Order = $Order;
 

@@ -3,48 +3,254 @@
 
 
 {% block body %}
-    <div class="yourCart">
+    <div class="yourCart" >
         Twoje zamówienie:<br>
-        <table>
+        <table style="float:left">
             <tr>
                 <td>Nr</td>
                 <td>Nazwa</td>
-                <td>Ilość</td>
-                <td>Rozmiar</td>
-                <td>Kolor</td>
+                <td>Cena</td>
+
             </tr>
             {% set i = 1 %}
-        {% for cartItem in app.session.get('shoppingCart') %}
+        {% for product in products %}
             <tr>
-                <td>{{ cartItem.id }}</td>
-                <td>{{ cartItem.item }}</td>
-                <td>{{ cartItem.quantity }}</td>
-                <td>{{ cartItem.size }}</td>
-                <td>{{ cartItem.color }}</td>
+                <td></td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+
             </tr>
             {% set i = i + 1 %}
         {% endfor %}
         </table>
-    </div>
-    <div class="orderProgress">
 
-    </div>
+        <table style="float:left">
+            <tr>
+                <td>Rozmiar</td>
+            </tr>
+        {% for size in sizes %}
 
+            <tr>
+                <td>{{ size.name }}</td>
+            </tr>
+        {% endfor %}
+
+        </table>
+
+        <table style="float:left">
+            <tr>
+                <td>Kolor</td>
+            </tr>
+            {% for color in colors %}
+
+                <tr>
+                    <td>{{ color.color }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+        <table style="float:left">
+            <tr>
+                <td>Ilość</td>
+            </tr>
+            {% for item in app.session.get('shoppingCart') %}
+                <tr>
+                    <td>{{ item.quantity }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+    <div style="clear:both; margin-top:100px"></div>
+    <div class="orderDetails">
+        Wypełnij formularz do zamówienia
+        <div class="orderProgress">
+            <button id="addressButton" onclick="showStep('addressStep')" ><div class="orderStep">Podaj adres ></div></button>
+            <button id="deliveryButton" disabled onclick="showStep('deliveryStep')" ><div class="orderStep">Określ sposób dostawy ></div></button>
+            <button id="paymentButton" disabled onclick="showStep('paymentStep')" ><div class="orderStep">Wybierz sposób płatności ></div></button>
+            <button id="finishButton" disabled onclick="showStep('finishStep')" ><div class="orderStep">Zamów </div></button>
+        </div>
+        <div style="clear:both; margin-top:20px"></div>
+        <div class="progressWindow" id="progressWindow">
+            <div class="progressStep" id="addressStep" style="display: block;">
+                <form name="addressForm">
+                    Kraj: <input type="text" name="country" id="country" /> <br />
+                    Kod Pocztowy: <input type="text" name="postalcode" id="postalcode" /> <br />
+                    Miasto: <input type="text" name="city" id="city" /> <br />
+                    Adres: <input type="text" name="streetnr" id="streetnr" /> <br />
+                    <button type="button" class="stepButtons" id="sendPostBtn" >Submit Form!</button>
+                </form>
+            </div>
+            <div class="progressStep" id="deliveryStep"></div>
+            <div class="progressStep" id="paymentStep"></div>
+            <div class="progressStep" id="finishStep"></div>
+
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
-    <script>
-        function updateCart(){
-            var cart = document.getElementById('yourCart');
+<script>
+    $('#sendPostBtn').click(function(){
+        postAddress();
+        return false;
+    });
 
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    cart.innerHTML = this.responseText;
-                }
-            };
-            xhttp.open("GET", "{{ path('cartList') }}", false);
-            xhttp.send();
+    $('#sendDeliveryBtn').click(function(){
+        setDeliveryMethod();
+        return false;
+    });
+
+    $('#deliveryRadioPP').click(function(){
+        showOptions();
+
+    });
+
+    function showOptions  (name, id) {
+        var options = document.getElementById(name+'Options'+id);
+        var radio = document.getElementById(name+'Radio'+id);
+        var allOptionsl = document.getElementsByClassName(name+'Options').length;
+
+        for(var i = 0; i<allOptionsl; i++){
+            document.getElementById(name+'Options'+i).style.display = "none";
         }
-    </script>
+
+        if(radio.checked === true){
+            options.style.display = "block";
+        }else if (radio.checked === false){
+            options.style.display = "none";
+        }
+    }
+
+    function showStep(id){
+        var step = document.getElementById(id);
+        var steps = document.getElementsByClassName('progressStep');
+
+
+        for(var i = 0; i<steps.length; i++){
+            if(steps[i].style.display === "block"){
+                steps[i].style.display = "none";
+            }
+        }
+
+        step.style.display = "block";
+
+    }
+
+    function postAddress(){
+        // Create our XMLHttpRequest object
+        var xhttp = new XMLHttpRequest();
+        // Create some variables we need to send to our PHP file
+        var url = "{{ path('setAddress') }}";
+        var country = document.getElementById("country").value;
+        var postal = document.getElementById("postalcode").value;
+        var city = document.getElementById("city").value;
+        var stnr = document.getElementById("streetnr").value;
+
+        var btn = document.getElementById('deliveryButton');
+
+        var vars = "_country="+country+"&_postalcode="+postal+"&_city="+city+"&_streetnr="+stnr;
+
+        xhttp.open("POST", url, true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhttp.onreadystatechange = function() {
+            if(xhttp.readyState == 4 && xhttp.status == 200) {
+                btn.disabled = false;
+                document.getElementById("deliveryStep").innerHTML = xhttp.response;
+                document.getElementById("deliveryStep").style.display = "block";
+                document.getElementById('addressStep').style.display = "none";
+            }
+        }
+        xhttp.send(vars);
+    }
+
+
+    function setDeliveryMethod(){
+        var xhttp = new XMLHttpRequest();
+
+        var names = document.getElementsByName('deliveryOptionsRadio');
+
+        for(var i=0; i<names.length; i++){
+            if (names[i].checked === true){
+                var packageMethod = names[i].value;
+            }
+        }
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("paymentStep").innerHTML = xhttp.response;
+                document.getElementById('paymentButton').disabled = false;
+                document.getElementById("paymentStep").style.display = "block";
+                document.getElementById('deliveryStep').style.display = "none";
+            }
+        };
+        var url = "{{ path('setDeliveryMethod', {'packageMethod': 'packageMethodJS'}) }}";
+        url = url.replace("packageMethodJS", packageMethod);
+
+        xhttp.open("GET", url, false);
+        xhttp.send();
+    }
+
+
+
+    function setPaymentMethod(){
+        var xhttp = new XMLHttpRequest();
+
+        var names = document.getElementsByName('paymentOptionsRadio');
+
+        for(var i=0; i<names.length; i++){
+            if (names[i].checked === true){
+                var card = names[i].value;
+            }
+        }
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("finishStep").innerHTML = xhttp.response;
+                document.getElementById('finishButton').disabled = false;
+                document.getElementById("finishStep").style.display = "block";
+                document.getElementById('paymentStep').style.display = "none";
+            }
+        };
+        var url = "{{ path('setPaymentMethod', {'paymentMethod': 'paymentMethodJS'}) }}";
+        url = url.replace("paymentMethodJS", card);
+
+        xhttp.open("GET", url, false);
+        xhttp.send();
+    }
+
+    function finalizeOrder(){
+        var finalizeRadios = document.getElementsByClassName('cartPaymentRadio');
+        var stepButtons = document.getElementsByClassName('stepButtons');
+
+
+        for(var i = 0; i<finalizeRadios.length; i++){
+            if(finalizeRadios[i].checked === true && finalizeRadios[i].value == 0){
+                document.getElementById('finishStep').innerHTML = "Udało się! Zamówienie zostanie zrealizowane.";
+                var xhttp = new XMLHttpRequest();
+                // Create some variables we need to send to our PHP file
+                var url = "{{ path('finalizeOrder') }}";
+
+                xhttp.open("POST", url, true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                xhttp.onreadystatechange = function() {
+                    if(xhttp.readyState == 4 && xhttp.status == 200) {
+
+                    }
+                }
+                xhttp.send();
+
+                for(var j = 0; j<stepButtons.length; j++){
+                    stepButtons[j].disabled = true;
+                }
+            }else{
+                document.getElementById('finishStep').innerHTML = "Transakcja nie przyjęta."
+            }
+        }
+    }
+
+
+
+</script>
 {% endblock %}

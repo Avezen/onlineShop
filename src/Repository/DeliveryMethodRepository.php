@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\DeliveryMethod;
+use App\Entity\Order\DeliveryMethod;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

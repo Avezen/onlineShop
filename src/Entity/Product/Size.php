@@ -108,7 +108,7 @@ class Size
         return $this->Color;
     }
 
-    public function setSize(?Color $Color): self
+    public function setColor(?Color $Color): self
     {
         $this->Color = $Color;
 

@@ -3,18 +3,22 @@
 namespace App\Entity\Order;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
  */
-class Order
+class Orders
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
     private $id;
+
+
 
 
     /**
@@ -23,22 +27,17 @@ class Order
     private $Status;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Order\Address", mappedBy="Order")
+     * @ORM\OneToOne(targetEntity="App\Entity\Order\Address", mappedBy="Orders", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $Address;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order\OrderDetails", mappedBy="Order")
+     * @ORM\OneToMany(targetEntity="App\Entity\Order\OrderDetails", mappedBy="Orders", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $OrderDetails;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order\DeliveryMethod", mappedBy="Order")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $DeliveryMethod;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -46,58 +45,20 @@ class Order
     private $PaymentMethod;
 
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Order\PackageMethod", inversedBy="Orders", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     *
+     */
+    private $PackageMethod;
+
+
     public function getId()
     {
         return $this->id;
     }
 
-    public function getProducts(): ?string
-    {
-        return $this->Products;
-    }
 
-    public function setProducts(string $Products): self
-    {
-        $this->Products = $Products;
-
-        return $this;
-    }
-
-    public function getSizes(): ?string
-    {
-        return $this->Sizes;
-    }
-
-    public function setSizes(string $Sizes): self
-    {
-        $this->Sizes = $Sizes;
-
-        return $this;
-    }
-
-    public function getColors(): ?string
-    {
-        return $this->Colors;
-    }
-
-    public function setColors(string $Colors): self
-    {
-        $this->Colors = $Colors;
-
-        return $this;
-    }
-
-    public function getCharacteristics(): ?string
-    {
-        return $this->Characteristics;
-    }
-
-    public function setCharacteristics(string $Characteristics): self
-    {
-        $this->Characteristics = $Characteristics;
-
-        return $this;
-    }
 
     public function getStatus(): ?string
     {
@@ -111,14 +72,14 @@ class Order
         return $this;
     }
 
-    public function getDeliveryMethod(): ?DeliveryMethod
+    public function getPackageMethod(): ?PackageMethod
     {
-        return $this->DeliveryMethod;
+        return $this->PackageMethod;
     }
 
-    public function setDeliveryMethod(?DeliveryMethod $DeliveryMethod): self
+    public function setPackageMethod(?PackageMethod $PackageMethod): self
     {
-        $this->DeliveryMethod = $DeliveryMethod;
+        $this->PackageMethod = $PackageMethod;
 
         return $this;
     }
@@ -131,6 +92,7 @@ class Order
     public function setAddress(?Address $Address): self
     {
         $this->Address = $Address;
+        $Address->setOrder($this);
 
         return $this;
     }

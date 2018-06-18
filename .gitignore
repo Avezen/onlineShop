@@ -24,3 +24,6 @@ yarn-error.log
 
 
 .idea/
+###> phpunit/phpunit ###
+/phpunit.xml
+###< phpunit/phpunit ###

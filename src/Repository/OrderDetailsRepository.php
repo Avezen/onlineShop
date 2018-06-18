@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\OrderDetails;
+use App\Entity\Order\OrderDetails;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

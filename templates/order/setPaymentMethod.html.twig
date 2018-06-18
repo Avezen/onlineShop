@@ -1,0 +1,18 @@
+
+<form name="paymentMethodForm">
+    <label for="paymentRadio0" id="paymentRadio" class="paymentMethod" onchange="showOptions('payment', '0')">
+        <input class="paymentRadio" id="paymentRadio0" type="radio" name="paymentRadio" value="Płatność Kartą"/>
+        <div id="paymentRadio">
+            Płatność kartą
+        </div>
+        <div class="paymentOptions" id="paymentOptions0" style="display:none">
+            <label style="width: 200px">
+                <input class="paymentOptionsRadio" id="0" type="radio" name="paymentOptionsRadio" value="MasterCard"/> MasterCard <br>
+            </label>
+            <label style="width: 200px">
+                <input class="paymentOptionsRadio" id="1" type="radio" name="paymentOptionsRadio" value="Visa"/> Visa <br>
+            </label>
+        </div>
+    </label>
+    <button type="button" class="stepButtons" id="setPaymentBtn" onclick="setPaymentMethod()">Submit Form!</button>
+</form>

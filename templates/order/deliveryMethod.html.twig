@@ -1,0 +1,25 @@
+
+<form name="addressForm">
+    {% set i = 0 %}
+    {% for deliveryMethod in deliveryMethods %}
+
+        <label for="deliveryRadio{{ i }}" id="deliveryRadio" class="deliveryMethod" onchange="showOptions('delivery','{{ i }}')">
+            <input class="deliveryRadio" id="deliveryRadio{{ i }}" type="radio" name="deliveryRadio" value="{{ deliveryMethod.name }}"/>
+            <div id="deliveryDivPP">
+                {{ deliveryMethod.name }}
+            </div>
+            <div class="deliveryOptions" id="deliveryOptions{{ i }}" style="display:none">
+                {% for package in deliveryMethod.packageMethods %}
+                <label style="width: 200px">
+                    <input class="deliveryOptionsRadio" id="{{ package.id }}" type="radio" name="deliveryOptionsRadio" value="{{ package.id }}"/> {{ package.method }} {{ package.price }}zł <br>
+                </label>
+                {% endfor %}
+            </div>
+        </label>
+        {% set i = i + 1 %}
+    {% endfor %}
+    <button type="button" class="stepButtons" id="sendDeliveryBtn" onclick="setDeliveryMethod()">Submit Form!</button>
+</form>
+
+
+

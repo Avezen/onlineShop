@@ -52,5 +52,16 @@ html{
     width:200px;
 }
 
+.orderStep{
+    width:100%;
+    height: 40px;
+    text-align: center;
+    float:left;
+}
+
+.progressStep{
+    display: none;
+}
+
 
 

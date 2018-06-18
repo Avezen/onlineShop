@@ -3,6 +3,7 @@
 namespace App\Entity\Order;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderDetailsRepository")
@@ -18,7 +19,7 @@ class OrderDetails
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Order\Order", inversedBy="OrderDetails")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Order\Orders", inversedBy="OrderDetails", cascade={"persist"})
      */
     private $Order;
 
@@ -45,6 +46,18 @@ class OrderDetails
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getOrder(): ?Orders
+    {
+        return $this->Order;
+    }
+
+    public function setOrder(Orders $Order): self
+    {
+        $this->Order = $Order;
+
+        return $this;
     }
 
     public function getProductId(): ?int

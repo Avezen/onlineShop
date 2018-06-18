@@ -1,0 +1,15 @@
+<div>
+{% for deliveryMethod in deliveryMethods %}
+<br>
+    {{ deliveryMethod.name }}
+    {% for a in deliveryMethod.packageMethods %}
+        <br>
+        <td>{{ a.method }}</td>
+        <td>{{ a.price }}</td>
+    {% endfor %}
+
+{% endfor %}
+
+
+
+</div>
