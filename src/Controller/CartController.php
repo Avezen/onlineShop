@@ -42,7 +42,7 @@ class CartController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/shoppingCart/", name="shoppingCart")
+     * @Rest\Get("/shoppingCart", name="shoppingCart")
      */
     public function readCart(Request $request){
         $session = new Session();
@@ -53,7 +53,7 @@ class CartController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/shoppingCart/clear/", name="clearCart")
+     * @Rest\Get("/shoppingCart/clear", name="clearCart")
      */
     public function clearCart(){
         $session = new Session();

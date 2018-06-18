@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Product\Product;
-use App\Entity\Product\Characteristic;
 use App\Entity\Product\Color;
 use App\Entity\Product\Review;
 use App\Entity\Product\Size;
@@ -106,7 +105,7 @@ class ProductController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("products/{id}/reviews/", name="productReviews")
+     * @Rest\Get("products/{id}/reviews", name="productReviews")
      */
     public function getProductReviews()
     {
@@ -119,37 +118,7 @@ class ProductController extends FOSRestController
         }
     }
 
-    /**
-     * @Rest\Post("/product/")
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
-     */
-    public function addProduct(Request $request)
-    {
-        $data = new Product();
-        $name = $request->get('_name');
-        $description = $request->get('_description');
-        $brand = $request->get('_brand');
-        $price = $request->get('_price');
-        $date = \DateTime::createFromFormat('y-m-d', date("y-m-d"));
 
-        if(empty($name) ||  empty($description)|| empty($brand)|| empty($price) || empty($date))
-        {
-            return new View("NULL VALUES ARE NOT ALLOWED", Response::HTTP_NOT_ACCEPTABLE);
-        }
-
-        $data->setName($name);
-        $data->setDescription($description);
-        $data->setBrand($brand);
-        $data->setPrice($price);
-        $data->setDate($date);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($data);
-        $em->flush();
-
-        return new View("Product Added Successfully", Response::HTTP_OK);
-    }
 
 
 }

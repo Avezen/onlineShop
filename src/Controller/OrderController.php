@@ -26,7 +26,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class OrderController extends FOSRestController
 {
     /**
-     * @Rest\Get("/makingOrder/", name="makingOrder")
+     * @Rest\Get("/makingOrder", name="makingOrder")
      */
     public function makeOrder(Request $request){
         // Tutaj ma być pobranie danych z sesji na temat wózka, na podstawie których wyślemy requesty po szczegóły o produktach
@@ -70,7 +70,7 @@ class OrderController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/testMethod/", name="testMethod")
+     * @Rest\Get("/testMethod", name="testMethod")
      */
     public function testMethod(){
         $packageMethods = $this->getDoctrine()->getRepository(PackageMethod::class)->findAll();
@@ -83,7 +83,7 @@ class OrderController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("/setAddress/", name="setAddress")
+     * @Rest\Post("/setAddress", name="setAddress")
      */
     public function setAddress(Request $request){
         $session = new Session();
@@ -146,7 +146,7 @@ class OrderController extends FOSRestController
     }
 
     /**
-    * @Rest\Post("/finalizeOrder/", name="finalizeOrder")
+    * @Rest\Post("/finalizeOrder", name="finalizeOrder")
     */
     public function finalizeOrder(){
         $session = new Session();

@@ -1,0 +1,19 @@
+{% for order in orders %}
+<div>
+    {{ order.address.country }}
+    {{ order.packageMethod.method }}
+    {{ order.status }}
+    {{ order.paymentMethod }}
+</div>
+{% endfor %}
+<br>
+<div>
+    Dodaj produkt:
+    <form action="{{ path('addproduct') }}" method="POST">
+        Nazwa: <input type="text" name="_name"/><br>
+        Opis: <input type="text" name="_description"/><br>
+        Marka: <input type="text" name="_brand"/><br>
+        Cena: <input type="text" name="_price"/><br>
+        <button type="submit" >Dodaj</button>
+    </form>
+</div>
