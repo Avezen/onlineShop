@@ -44,7 +44,11 @@
                                 <a class="nav-link" onclick="showShoppingCart()">Koszyk <div id="cartCount">
                                         {{ app.session.get('shoppingCart')|length }}  </div></a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="login()" >Zaloguj się</a>
+                            </li>
                         </ul>
+
                         <form class="form-inline my-2 my-lg-0">
                             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -54,6 +58,7 @@
             </header>
         {% endblock %}
         <div class="shopppingCart" id="shoppingCart"></div>
+        <div id="loginform" style="display: none"></div>
         {% block body %}{% endblock %}
         {% block footer %}{% endblock %}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -61,7 +66,25 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <script>
 
+            function login(){
+                var xhttp = new XMLHttpRequest();
+                var loginform = document.getElementById('loginform');
+                if(loginform.style.display === "none"){
+                    if(loginform.innerHTML === ""){
+                        xhttp.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+                                loginform.innerHTML = this.responseText;
 
+                            }
+                        };
+                        xhttp.open("GET", "{{ path('fos_user_security_login') }}", false);
+                        xhttp.send();
+                    }
+                    loginform.style.display = "block";
+                }else{
+                    loginform.style.display = "none";
+                }
+            }
 
             function showShoppingCart(){
                 var cart = document.getElementById('shoppingCart');
