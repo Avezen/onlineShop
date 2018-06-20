@@ -2,15 +2,24 @@
 
 namespace App\Entity\Order;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
-
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
  */
 class Orders
 {
+
+
+    public function __construct()
+    {
+        $this->OrderDetails = new ArrayCollection();
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -27,16 +36,21 @@ class Orders
     private $Status;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Order\Address", mappedBy="Orders", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Order\Address", mappedBy="Order", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $Address;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order\OrderDetails", mappedBy="Orders", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity="App\Entity\Order\OrderDetails", mappedBy="Order", cascade={"persist"})
+     * @JoinTable(name="orderDetails",
+     *      joinColumns={@JoinColumn(name="orders_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="orderDetails_id", referencedColumnName="id", unique=true)}
+     *      )
      */
     private $OrderDetails;
+
+
 
 
     /**
@@ -46,7 +60,7 @@ class Orders
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Order\PackageMethod", inversedBy="Orders", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Order\PackageMethod", inversedBy="Order", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      *
      */
@@ -109,15 +123,36 @@ class Orders
         return $this;
     }
 
-    public function getOrderDetails(): ?OrderDetails
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection|OrderDetails[]
+     */
+    public function getOrderDetails(): Collection
     {
-        return $this->PaymentMethod;
+        return $this->OrderDetails;
     }
 
-    public function setOrderDetails(?OrderDetails $OrderDetails): self
+    public function addOrderDetails(OrderDetails $OrderDetails): self
     {
-        $this->OrderDetails = $OrderDetails;
+        if (!$this->OrderDetails->contains($OrderDetails)) {
+            $this->OrderDetails[] = $OrderDetails;
+            $OrderDetails->setOrder($this);
+        }
 
         return $this;
     }
+
+    public function removeOrderDetails(OrderDetails $OrderDetails): self
+    {
+        if ($this->OrderDetails->contains($OrderDetails)) {
+            $this->OrderDetails->removeElement($OrderDetails);
+            // set the owning side to null (unless already changed)
+            if ($OrderDetails->getOrder() === $this) {
+                $OrderDetails->setOrder(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

@@ -36,7 +36,7 @@ class PackageMethod
     private $Order;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Order\DeliveryMethod", inversedBy="PackageMethod")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Order\DeliveryMethod", inversedBy="PackageMethods")
      *
      */
     private $DeliveryMethod;
@@ -82,12 +82,12 @@ class PackageMethod
         return $this;
     }
 
-    public function getDeliveryMethod(): ?int
+    public function getDeliveryMethod(): ?DeliveryMethod
     {
         return $this->DeliveryMethod;
     }
 
-    public function setDeliveryMethod(?int $DeliveryMethod): self
+    public function setDeliveryMethod(?DeliveryMethod $DeliveryMethod): self
     {
         $this->DeliveryMethod = $DeliveryMethod;
 

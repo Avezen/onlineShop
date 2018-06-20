@@ -15,6 +15,11 @@ use Traversable;
 class DeliveryMethod implements Collection
 {
 
+    public function __construct()
+    {
+        $this->PackageMethods = new ArrayCollection();
+    }
+
 
     /**
      * @ORM\Id()
@@ -44,6 +49,7 @@ class DeliveryMethod implements Collection
      *
      */
     private $PackageMethods;
+
 
 
 

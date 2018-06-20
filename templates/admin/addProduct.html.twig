@@ -1,19 +1,41 @@
-{% for order in orders %}
-<div>
-    {{ order.address.country }}
-    {{ order.packageMethod.method }}
-    {{ order.status }}
-    {{ order.paymentMethod }}
-</div>
-{% endfor %}
-<br>
-<div>
-    Dodaj produkt:
-    <form action="{{ path('addproduct') }}" method="POST">
-        Nazwa: <input type="text" name="_name"/><br>
-        Opis: <input type="text" name="_description"/><br>
-        Marka: <input type="text" name="_brand"/><br>
-        Cena: <input type="text" name="_price"/><br>
-        <button type="submit" >Dodaj</button>
-    </form>
-</div>
+{% extends 'admin/index.html.twig' %}
+
+{% block orders %}
+    <table>
+        <tr>
+            <td>Id</td>
+            <td>Status</td>
+            <td>Szczegóły</td>
+            <td>Adres</td>
+            <td>Metoda dostawy</td>
+        </tr>
+        {% for order in orders %}
+
+         <tr>
+             <td>{{ order.id }}</td>
+             <td>{{ order.status }}</td>
+             <td>
+             {% for detail in order.orderDetails %}
+            {{ detail.size }}
+             {% endfor %}
+             </td>
+             <td>{{ order.address.streetnr }}</td>
+             <td>{{ order.packageMethod.method }}</td>
+         </tr>
+
+        {% endfor %}
+    </table>
+{% endblock %}
+{% block addProduct %}
+    <br>
+    <div>
+        Dodaj produkt:
+        <form action="{{ path('addproduct') }}" method="POST">
+            Nazwa: <input type="text" name="_name"/><br>
+            Opis: <input type="text" name="_description"/><br>
+            Marka: <input type="text" name="_brand"/><br>
+            Cena: <input type="text" name="_price"/><br>
+            <button type="submit" >Dodaj</button>
+        </form>
+    </div>
+{% endblock  %}
