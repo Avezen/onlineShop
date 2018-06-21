@@ -44,9 +44,22 @@
                                 <a class="nav-link" onclick="showShoppingCart()">Koszyk <div id="cartCount">
                                         {{ app.session.get('shoppingCart')|length }}  </div></a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" onclick="login()" >Zaloguj się</a>
-                            </li>
+                            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                                <a href="{{ path('fos_user_security_logout') }}">
+                                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                                </a>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link" onclick="login()" >Zaloguj się</a>
+                                </li>
+                            {% endif %}
+                            {% if is_granted("ROLE_ADMIN") %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('adminpanel') }}" >Panel Admina</a>
+                                </li>
+                            {% endif %}
+
                         </ul>
 
                         <form class="form-inline my-2 my-lg-0">
@@ -59,7 +72,9 @@
         {% endblock %}
         <div class="shopppingCart" id="shoppingCart"></div>
         <div id="loginform" style="display: none"></div>
+        <main>
         {% block body %}{% endblock %}
+        </main>
         {% block footer %}{% endblock %}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

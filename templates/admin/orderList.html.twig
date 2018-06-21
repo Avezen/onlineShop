@@ -1,0 +1,68 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block body %}
+    <table>
+        <tr>
+            <td>Id</td>
+            <td>Status</td>
+            <td>Szczegóły</td>
+            <td>Adres</td>
+            <td>Metoda dostawy</td>
+        </tr>
+        {% for order in orders %}
+
+         <tr>
+             <td>{{ order.id }}</td>
+             <td>{{ order.status }}</td>
+             <td><button onclick="showProductDetails({{ order.id }})" id="showProductDetails{{ order.id }}">pokaż szegóły</button>
+
+             </td>
+             <td>{{ order.address.streetnr }}</td>
+             <td>{{ order.packageMethod.method }}</td>
+         </tr>
+         <tr>
+             <td colspan="2"></td>
+             <td colspan="3">
+                <div id="details{{ order.id }}" style="display: none;">
+                    <table>
+                        <tr>
+                            <td>Nazwa</td>
+                            <td>Rozmiar</td>
+                            <td>Kolor</td>
+                            <td>Ilość</td>
+                        </tr>
+                    {% for detail in order.orderDetails %}
+                            <tr>
+                                <td>{{ detail.productId }}</td>
+                                <td>{{ detail.size }}</td>
+                                <td>{{ detail.color }}</td>
+                                <td>{{ detail.quantity }}</td>
+                            </tr>
+
+                    {% endfor %}
+                    </table>
+                </div>
+             </td>
+         </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        $('.showProductDetails').click(function(){
+            showProductDetails();
+            return false;
+        });
+
+        function showProductDetails(id){
+            var details = document.getElementById('details'+id);
+
+            if(details.style.display === "none")
+                details.style.display = "block";
+            else
+                details.style.display = "none";
+        }
+    </script>
+{% endblock %}

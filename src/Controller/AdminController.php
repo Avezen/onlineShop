@@ -54,12 +54,21 @@ class AdminController extends FOSRestController
     }
 
     /**
+     * @Rest\Get("/addProductForm", name="addProductForm")
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function addProductForm(){
+
+        return $this->render('Admin/addProduct.html.twig');
+    }
+
+    /**
      * @Rest\Get("/adminpanel", name="adminpanel")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function admin(){
         $orders = $this->getDoctrine()->getRepository(Orders::class)->findAll();
 
-        return $this->render('Admin/addProduct.html.twig', array("orders"=>$orders));
+        return $this->render('Admin/orderList.html.twig', array("orders"=>$orders));
     }
 }

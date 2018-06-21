@@ -1,80 +1,25 @@
-{% extends 'admin/index.html.twig' %}
 
-{% block orders %}
-    <table>
-        <tr>
-            <td>Id</td>
-            <td>Status</td>
-            <td>Szczegóły</td>
-            <td>Adres</td>
-            <td>Metoda dostawy</td>
-        </tr>
-        {% for order in orders %}
+Dodaj produkt:
+<form id="addProductForm" action="{{ path('addproduct') }}" method="POST">
+    Nazwa: <input type="text" name="_name"/><br>
+    Opis: <input type="text" name="_description"/><br>
+    Kategoria:  <select name="_category">
+        <option value="T-Shirt">T-Shirt</option>
+        <option value="Hoodie">Hoodie</option>
+        <option value="Spódnica">Spódnica</option>
+        <option value="Jeansy">Jeansy</option>
+    </select><br>
+    Cena: <input type="text" name="_price"/><br>
+    Zdjęcie: <input type="text" name="_photo"/><br>
+    Marka: <input type="text" name="_brand"/><br>
+    Płeć: <select name="_sex">
+        <option value="male">Męskie</option>
+        <option value="female">Żeńskie</option>
+        <option value="male/female">Męskie/Żeńskie</option>
+    </select><br>
+    Pochodzenie: <input type="text" name="_origin"/><br>
+    Materiały: <input type="text" name="_materials"/><br>
 
-         <tr>
-             <td>{{ order.id }}</td>
-             <td>{{ order.status }}</td>
-             <td><button onclick="showProductDetails({{ order.id }})" id="showProductDetails{{ order.id }}">pokaż szegóły</button>
+    <button type="submit" >Dodaj</button>
+</form>
 
-             </td>
-             <td>{{ order.address.streetnr }}</td>
-             <td>{{ order.packageMethod.method }}</td>
-         </tr>
-         <tr>
-             <td colspan="2"></td>
-             <td colspan="3">
-                <div id="details{{ order.id }}" style="display: none;">
-                    <table>
-                        <tr>
-                            <td>Nazwa</td>
-                            <td>Rozmiar</td>
-                            <td>Kolor</td>
-                            <td>Ilość</td>
-                        </tr>
-                    {% for detail in order.orderDetails %}
-                            <tr>
-                                <td>{{ detail.productId }}</td>
-                                <td>{{ detail.size }}</td>
-                                <td>{{ detail.color }}</td>
-                                <td>{{ detail.quantity }}</td>
-                            </tr>
-
-                    {% endfor %}
-                    </table>
-                </div>
-             </td>
-         </tr>
-        {% endfor %}
-    </table>
-{% endblock %}
-{% block addProduct %}
-    <br>
-    <div>
-        Dodaj produkt:
-        <form action="{{ path('addproduct') }}" method="POST">
-            Nazwa: <input type="text" name="_name"/><br>
-            Opis: <input type="text" name="_description"/><br>
-            Marka: <input type="text" name="_brand"/><br>
-            Cena: <input type="text" name="_price"/><br>
-            <button type="submit" >Dodaj</button>
-        </form>
-    </div>
-{% endblock  %}
-
-{% block javascripts %}
-    <script>
-        $('.showProductDetails').click(function(){
-            showProductDetails();
-            return false;
-        });
-
-        function showProductDetails(id){
-            var details = document.getElementById('details'+id);
-
-            if(details.style.display === "none")
-                details.style.display = "block";
-            else
-                details.style.display = "none";
-        }
-    </script>
-{% endblock %}
