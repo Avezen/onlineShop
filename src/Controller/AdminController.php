@@ -22,17 +22,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class AdminController extends FOSRestController
 {
     /**
-     * @Rest\Post("/addproduct", name="addproduct")
+     * @Rest\Get("/addproduct/{name}/{description}/{category}/{price}/{photo}/{brand}/{sex}/{origin}/{materials}", name="addproduct")
      * @Security("is_granted('ROLE_ADMIN')")
      *
      */
-    public function addProduct(Request $request)
+    public function addProduct($name, $description, $category, $price, $photo, $brand, $sex, $origin, $materials)
     {
         $data = new Product();
-        $name = $request->get('_name');
-        $description = $request->get('_description');
-        $brand = $request->get('_brand');
-        $price = $request->get('_price');
+
+        $session = new Session();
+
         $date = \DateTime::createFromFormat('y-m-d', date("y-m-d"));
 
         if(empty($name) ||  empty($description)|| empty($brand)|| empty($price) || empty($date))
@@ -42,15 +41,18 @@ class AdminController extends FOSRestController
 
         $data->setName($name);
         $data->setDescription($description);
-        $data->setBrand($brand);
+        $data->setCategory($category);
         $data->setPrice($price);
+        $data->setPhoto($photo);
+        $data->setBrand($brand);
+        $data->setSex($sex);
+        $data->setOrigin($origin);
+        $data->setMaterials($materials);
         $data->setDate($date);
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($data);
-        $em->flush();
+        $session->set("product", $data);
 
-        return new View("Product Added Successfully", Response::HTTP_OK);
+        return $this->render('Admin/setProductSizes.html.twig', array("product"=>$session));
     }
 
     /**

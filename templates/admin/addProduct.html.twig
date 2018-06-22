@@ -1,25 +1,118 @@
+{% extends 'admin/index.html.twig' %}
+{% block body %}
 
-Dodaj produkt:
-<form id="addProductForm" action="{{ path('addproduct') }}" method="POST">
-    Nazwa: <input type="text" name="_name"/><br>
-    Opis: <input type="text" name="_description"/><br>
-    Kategoria:  <select name="_category">
-        <option value="T-Shirt">T-Shirt</option>
-        <option value="Hoodie">Hoodie</option>
-        <option value="Spódnica">Spódnica</option>
-        <option value="Jeansy">Jeansy</option>
-    </select><br>
-    Cena: <input type="text" name="_price"/><br>
-    Zdjęcie: <input type="text" name="_photo"/><br>
-    Marka: <input type="text" name="_brand"/><br>
-    Płeć: <select name="_sex">
-        <option value="male">Męskie</option>
-        <option value="female">Żeńskie</option>
-        <option value="male/female">Męskie/Żeńskie</option>
-    </select><br>
-    Pochodzenie: <input type="text" name="_origin"/><br>
-    Materiały: <input type="text" name="_materials"/><br>
+<div class="addProduct">
+    Dodaj produkt:
+    <div class="addProductProgress">
+        <button id="generalInfoButton" onclick="showStep('generalInfoStep')" ><div class="orderStep">Informacje ogólne ></div></button>
+        <button id="sizesButton" disabled onclick="showStep('sizesStep')" ><div class="orderStep">Dostępne rozmiary ></div></button>
+        <button id="colorsButton" disabled onclick="showStep('colorsStep')" ><div class="orderStep">Dostępne kolory ></div></button>
+        <button id="finishButton" disabled onclick="showStep('finishStep')" ><div class="orderStep">Zamów </div></button>
+    </div>
 
-    <button type="submit" >Dodaj</button>
-</form>
+    <div class="progressStep" id="generalInfoStep" style="display: block;">
+        <form id="addProductForm" method="GET">
+            Nazwa: <input type="text" id="name" required/><br>
+            Opis: <input type="text" id="description"/><br>
+            Kategoria:  <select id="category">
+                <option value="T-Shirt">T-Shirt</option>
+                <option value="Hoodie">Hoodie</option>
+                <option value="Spódnica">Spódnica</option>
+                <option value="Jeansy">Jeansy</option>
+            </select><br>
+            Cena: <input type="text" id="price" required/><br>
+            <p></p>
+            Zdjęcie: <input type="text" id="photo"/><br>
+            Marka: <input type="text" id="brand"/><br>
+            Płeć: <select id="sex">
+                <option value="male">Męskie</option>
+                <option value="female">Żeńskie</option>
+                <option value="male/female">Męskie/Żeńskie</option>
+            </select><br>
+            Pochodzenie: <input type="text" id="origin"/><br>
+            Materiały: <input type="text" id="materials"/><br>
 
+            <button type="submit">Dodaj</button>
+        </form>
+    </div>
+    <div class="progressStep" id="sizesStep"></div>
+    <div class="progressStep" id="colorsStep"></div>
+    <div class="progressStep" id="finishStep"></div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+
+        $('#addProductForm').submit(function (event) {
+
+            event.preventDefault();
+            // Create our XMLHttpRequest object
+            postProductGeneralInfo();
+        });
+
+
+
+        function postProductGeneralInfo(){
+            var xhttp = new XMLHttpRequest();
+            // Create some variables we need to send to our PHP file
+            var name = document.getElementById("name").value;
+            var description = document.getElementById("description").value;
+            var category = document.getElementById("category").value;
+            var price = document.getElementById("price").value;
+            var photo = document.getElementById("photo").value;
+            var brand = document.getElementById("brand").value;
+            var sex = document.getElementById("sex").value;
+            var origin = document.getElementById("origin").value;
+            var materials = document.getElementById("materials").value;
+
+            var btn = document.getElementById('sizesButton');
+
+            if(!isNaN(price) && isFinite(price)){
+                var url = "{{ path('addproduct', {'name': 'nameJS', 'description':'descriptionJS', 'category':'categoryJS','price':'priceJS'
+                    , 'photo':'photoJS', 'brand':'brandJS', 'sex': "sexJS", 'origin':'originJS', 'materials':'materialsJS'}) }}";
+
+                url = url.replace("nameJS", name);
+                url = url.replace("descriptionJS", description);
+                url = url.replace("categoryJS", category);
+                url = url.replace("priceJS", price);
+                url = url.replace("photoJS", photo);
+                url = url.replace("brandJS", brand);
+                url = url.replace("sexJS", sex);
+                url = url.replace("originJS", origin);
+                url = url.replace("materialsJS", materials);
+
+                xhttp.onreadystatechange = function() {
+                    if(xhttp.readyState == 4 && xhttp.status == 200) {
+                        btn.disabled = false;
+                        document.getElementById("sizesStep").innerHTML = xhttp.response;
+                        document.getElementById("sizesStep").style.display = "block";
+                        document.getElementById('generalInfoStep').style.display = "none";
+                    }
+                };
+                xhttp.open("GET", url, false);
+                xhttp.send();
+            }else{
+                document.getElementsByTagName('p')[0].innerHTML = 'podaj liczbę';
+            }
+
+
+        }
+
+        function showStep(id){
+            var step = document.getElementById(id);
+            var steps = document.getElementsByClassName('progressStep');
+
+
+            for(var i = 0; i<steps.length; i++){
+                if(steps[i].style.display === "block"){
+                    steps[i].style.display = "none";
+                }
+            }
+
+            step.style.display = "block";
+
+        }
+    </script>
+{% endblock %}
