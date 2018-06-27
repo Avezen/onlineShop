@@ -4,10 +4,10 @@
 <div class="addProduct">
     Dodaj produkt:
     <div class="addProductProgress">
-        <button id="generalInfoButton" onclick="showStep('generalInfoStep')" ><div class="orderStep">Informacje ogólne ></div></button>
-        <button id="sizesButton" disabled onclick="showStep('sizesStep')" ><div class="orderStep">Dostępne rozmiary ></div></button>
-        <button id="colorsButton" disabled onclick="showStep('colorsStep')" ><div class="orderStep">Dostępne kolory ></div></button>
-        <button id="finishButton" disabled onclick="showStep('finishStep')" ><div class="orderStep">Zamów </div></button>
+        <button class="stepButton" id="generalInfoButton"><div class="orderStep">Informacje ogólne ></div></button>
+        <button class="stepButton" id="sizesButton" disabled><div class="orderStep">Dostępne rozmiary ></div></button>
+        <button class="stepButton" id="colorsButton" disabled><div class="orderStep">Dostępne kolory ></div></button>
+        <button class="stepButton" id="finishButton" disabled><div class="orderStep">Zamów </div></button>
     </div>
 
     <div class="progressStep" id="generalInfoStep" style="display: block;">
@@ -44,15 +44,19 @@
 
 {% block javascripts %}
     <script>
+        $(document).ready(function(){
+            $("#addProductForm").submit(function (event) {
+                event.preventDefault();
+                postProductGeneralInfo();
+                return false;
+            });
 
-        $('#addProductForm').submit(function (event) {
+            $(".stepButton").click(function(){
+                showStep(this.id.replace("Button", "Step"));
+                return false;
+            });
 
-            event.preventDefault();
-            // Create our XMLHttpRequest object
-            postProductGeneralInfo();
         });
-
-
 
         function postProductGeneralInfo(){
             var xhttp = new XMLHttpRequest();
@@ -70,8 +74,19 @@
             var btn = document.getElementById('sizesButton');
 
             if(!isNaN(price) && isFinite(price)){
-                var url = "{{ path('addproduct', {'name': 'nameJS', 'description':'descriptionJS', 'category':'categoryJS','price':'priceJS'
-                    , 'photo':'photoJS', 'brand':'brandJS', 'sex': "sexJS", 'origin':'originJS', 'materials':'materialsJS'}) }}";
+                var url = "{{ path('addproduct',
+                    {
+                        'name': 'nameJS',
+                        'description':'descriptionJS',
+                        'category':'categoryJS',
+                        'price':'priceJS',
+                        'photo':'photoJS',
+                        'brand':'brandJS',
+                        'sex': "sexJS",
+                        'origin':'originJS',
+                        'materials':'materialsJS'
+                    })
+                }}";
 
                 url = url.replace("nameJS", name);
                 url = url.replace("descriptionJS", description);
@@ -104,15 +119,13 @@
             var step = document.getElementById(id);
             var steps = document.getElementsByClassName('progressStep');
 
-
             for(var i = 0; i<steps.length; i++){
                 if(steps[i].style.display === "block"){
                     steps[i].style.display = "none";
                 }
             }
-
             step.style.display = "block";
-
+            return false;
         }
     </script>
 {% endblock %}

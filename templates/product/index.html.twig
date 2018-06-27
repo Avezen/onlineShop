@@ -19,7 +19,7 @@
     </div>
     <div class="prContainer" id="prContainer">
     {% for product in products %}
-        <div id="prWid{{ product.id }}" class="prWindow" onclick="openModal({{ product.id }})" onmouseout="hoverOne({{ product.id }})" onmouseover="hoverOne({{ product.id }})">
+        <div id="prWid{{ product.id }}" class="prWindow" >
             <div class="prTitle"> <h5>{{ product.name }}</h5></div>
             <div class="prPhoto"></div>
             <div class="prUnderPhoto">
@@ -33,12 +33,91 @@
 
 {% block javascripts %}
     <script>
-        var modal = document.getElementById('myModal');
+        $(".prWindow").mouseover(function(){
+            hoverOne(this.id.replace("prWid",""));
+            return false;
+        });
 
-        // Get the <span> element that closes the modal
+        $(".prWindow").mouseout(function(){
+            hoverOne(this.id.replace("prWid",""));
+            return false;
+        });
+
+        $(document).ready(function(){
+            $(".prWindow").click(function(){
+                openModal(this.id.replace("prWid",""));
+                return false;
+            });
+/*
+            $(".prAddtoCartBtn").click(function(){
+                addToCart(this.id.replace("prWid",""));
+                return false;
+            });
+*/
+            $('#progressWindow').on("change", ".deliveryMethod", function () {
+                showOptions('delivery',this.id.replace("deliveryRadioLabel", ""));
+            });
+
+
+        });
+
+        $(document).ready(function() {
+            $("#showCart").click(function () {
+                showShoppingCart();
+                return false;
+            });
+
+            $("#login").click(function () {
+                login();
+                return false;
+            });
+        });
+
+        function login(){
+            var xhttp = new XMLHttpRequest();
+            var loginform = document.getElementById('loginform');
+            if(loginform.style.display === "none"){
+                if(loginform.innerHTML === ""){
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            loginform.innerHTML = this.responseText;
+
+                        }
+                    };
+                    xhttp.open("GET", "{{ path('fos_user_security_login') }}", false);
+                    xhttp.send();
+                }
+                loginform.style.display = "block";
+            }else{
+                loginform.style.display = "none";
+            }
+        }
+
+        function showShoppingCart(){
+            var cart = document.getElementById('shoppingCart');
+
+
+            if (cart.style.display === 'none') {
+                cart.style.display = 'block';
+                if (cart.innerHTML === "") {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            cart.innerHTML = this.responseText;
+                        }
+                    };
+                    xhttp.open("GET", "{{ path('shoppingCart') }}", false);
+                    xhttp.send();
+                }
+            } else {
+                cart.style.display = 'none';
+            }
+        }
+
+
+        var modal = document.getElementById('myModal');
         var span = document.getElementsByClassName("close")[0];
 
-        // When the user clicks on the button, open the modal
         function openModal(id) {
             var url = "{{ path('product', { 'id': 'idJS' }) }}";
 
@@ -57,7 +136,6 @@
         }
 
         function addToCart(id, productName, quantity, size, color, price) {
-
             var count = document.getElementById("cartCount");
 
             if(id === null || productName === null || quantity === null || size === null || color === null || price === null)

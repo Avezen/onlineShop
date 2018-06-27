@@ -1,9 +1,9 @@
 
-<form name="addressForm">
+<form id="setDeliveryForm" method="GET">
     {% set i = 0 %}
     {% for deliveryMethod in deliveryMethods %}
 
-        <label for="deliveryRadio{{ i }}" id="deliveryRadio" class="deliveryMethod" onchange="showOptions('delivery','{{ i }}')">
+        <label for="deliveryRadio{{ i }}" id="deliveryRadioLabel{{ i }}" class="deliveryMethod" >
             <input class="deliveryRadio" id="deliveryRadio{{ i }}" type="radio" name="deliveryRadio" value="{{ deliveryMethod.name }}"/>
             <div id="deliveryDivPP">
                 {{ deliveryMethod.name }}
@@ -18,8 +18,9 @@
         </label>
         {% set i = i + 1 %}
     {% endfor %}
-    <button type="button" class="stepButtons" id="sendDeliveryBtn" onclick="setDeliveryMethod()">Submit Form!</button>
+    <button type="submit" id="setDeliveryButton">Submit Form!</button>
 </form>
+
 
 
 

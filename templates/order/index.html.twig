@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 
-
 {% block body %}
     <div class="yourCart" >
         Twoje zamówienie:<br>
@@ -10,7 +9,6 @@
                 <td>Nr</td>
                 <td>Nazwa</td>
                 <td>Cena</td>
-
             </tr>
             {% set i = 1 %}
         {% for product in products %}
@@ -18,7 +16,6 @@
                 <td></td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.price }}</td>
-
             </tr>
             {% set i = i + 1 %}
         {% endfor %}
@@ -29,12 +26,10 @@
                 <td>Rozmiar</td>
             </tr>
         {% for size in sizes %}
-
             <tr>
                 <td>{{ size.name }}</td>
             </tr>
         {% endfor %}
-
         </table>
 
         <table style="float:left">
@@ -42,7 +37,6 @@
                 <td>Kolor</td>
             </tr>
             {% for color in colors %}
-
                 <tr>
                     <td>{{ color.color }}</td>
                 </tr>
@@ -59,17 +53,16 @@
                     <td>{{ item.quantity }}</td>
                 </tr>
             {% endfor %}
-
         </table>
     </div>
     <div style="clear:both; margin-top:100px"></div>
     <div class="orderDetails">
         Wypełnij formularz do zamówienia
         <div class="orderProgress">
-            <button id="addressButton" onclick="showStep('addressStep')" ><div class="orderStep">Podaj adres ></div></button>
-            <button id="deliveryButton" disabled onclick="showStep('deliveryStep')" ><div class="orderStep">Określ sposób dostawy ></div></button>
-            <button id="paymentButton" disabled onclick="showStep('paymentStep')" ><div class="orderStep">Wybierz sposób płatności ></div></button>
-            <button id="finishButton" disabled onclick="showStep('finishStep')" ><div class="orderStep">Zamów </div></button>
+            <button class="stepButton" id="addressButton"><div class="orderStep">Podaj adres ></div></button>
+            <button class="stepButton" id="deliveryButton" disabled><div class="orderStep">Określ sposób dostawy ></div></button>
+            <button class="stepButton" id="paymentButton" disabled><div class="orderStep">Wybierz sposób płatności ></div></button>
+            <button class="stepButton" id="finishButton" disabled><div class="orderStep">Zamów </div></button>
         </div>
         <div style="clear:both; margin-top:20px"></div>
         <div class="progressWindow" id="progressWindow">
@@ -92,22 +85,45 @@
 
 {% block javascripts %}
 <script>
-    $('#sendPostBtn').click(function(){
-        postAddress();
-        return false;
+    $(document).ready(function(){
+        $(".stepButton").click(function(){
+            showStep(this.id.replace("Button", "Step"));
+            return false;
+        });
+
+        $('#sendPostBtn').click(function(){
+            postAddress();
+            return false;
+        });
+
+
+        $('#progressWindow').on("change", ".deliveryMethod", function () {
+            showOptions('delivery',this.id.replace("deliveryRadioLabel", ""));
+        });
+
+        $('#progressWindow').on("change", ".paymentMethod", function () {
+            showOptions('payment',this.id.replace("paymentRadioLabel", ""));
+        });
+
+
+        $('#progressWindow').on("submit", "#setDeliveryForm", function (event) {
+            event.preventDefault();
+            setDeliveryMethod();
+        });
+
+        $('#progressWindow').on("submit", "#setPaymentMethodForm", function (event) {
+            event.preventDefault();
+            setPaymentMethod();
+        });
+
+        $('#progressWindow').on("click", "#finalizeOrder", function (event) {
+            event.preventDefault();
+            finalizeOrder();
+        });
     });
 
-    $('#sendDeliveryBtn').click(function(){
-        setDeliveryMethod();
-        return false;
-    });
 
-    $('#deliveryRadioPP').click(function(){
-        showOptions();
-
-    });
-
-    function showOptions  (name, id) {
+    function showOptions(name, id) {
         var options = document.getElementById(name+'Options'+id);
         var radio = document.getElementById(name+'Radio'+id);
         var allOptionsl = document.getElementsByClassName(name+'Options').length;
@@ -249,8 +265,5 @@
             }
         }
     }
-
-
-
 </script>
 {% endblock %}

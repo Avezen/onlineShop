@@ -41,7 +41,7 @@
                                 <a class="nav-link disabled" href="#">Disabled</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" onclick="showShoppingCart()">Koszyk <div id="cartCount">
+                                <a class="nav-link" id="showCart">Koszyk <div id="cartCount">
                                         {{ app.session.get('shoppingCart')|length }}  </div></a>
                             </li>
                             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -51,7 +51,7 @@
                                 </a>
                             {% else %}
                                 <li class="nav-item">
-                                    <a class="nav-link" onclick="login()" >Zaloguj się</a>
+                                    <a class="nav-link" id="login">Zaloguj się</a>
                                 </li>
                             {% endif %}
                             {% if is_granted("ROLE_ADMIN") %}
@@ -80,6 +80,17 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <script>
+            $(document).ready(function() {
+                $("#showCart").click(function () {
+                    showShoppingCart();
+                    return false;
+                });
+
+                $("#login").click(function () {
+                    login();
+                    return false;
+                });
+            });
 
             function login(){
                 var xhttp = new XMLHttpRequest();
@@ -92,7 +103,7 @@
 
                             }
                         };
-                        xhttp.open("GET", "{{ path('fos_user_security_login') }}", false);
+                        xhttp.open("GET", {{ path('fos_user_security_login') }}, false);
                         xhttp.send();
                     }
                     loginform.style.display = "block";
@@ -105,7 +116,7 @@
                 var cart = document.getElementById('shoppingCart');
 
 
-                if (cart.style.display == 'none') {
+                if (cart.style.display === 'none') {
                     cart.style.display = 'block';
                     if (cart.innerHTML === "") {
                         var xhttp = new XMLHttpRequest();
@@ -114,15 +125,15 @@
                                 cart.innerHTML = this.responseText;
                             }
                         };
-                        xhttp.open("GET", "{{ path('shoppingCart') }}", false);
+                        xhttp.open("GET", {{ path('shoppingCart') }}, false);
                         xhttp.send();
                     }
                 } else {
                     cart.style.display = 'none';
                 }
             }
-
         </script>
+
         {% block javascripts %}
             {% endblock %}
     </body>

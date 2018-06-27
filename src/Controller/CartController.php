@@ -42,7 +42,7 @@ class CartController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/shoppingCart", name="shoppingCart")
+     * @Rest\Get("/shoppingCart", name="shoppingCart", options={"expose"=true})
      */
     public function readCart(Request $request){
         $session = new Session();

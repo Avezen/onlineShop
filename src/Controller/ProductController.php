@@ -31,7 +31,7 @@ class ProductController extends FOSRestController
         if ($products === null) {
             return new View("there are no products exist", Response::HTTP_NOT_FOUND);
         }else{
-            return $this->render('product/index.html.twig', array('products' => $products));
+            return $this->render('product/index.html.twig', array("products" => $products));
             }
     }
 
@@ -54,7 +54,7 @@ class ProductController extends FOSRestController
                 'product' => $product,
                 'productReviews' => $productReviews,
                 'productSizes' => $productSizes,
-                'productColors' => $productColors,
+                'productColors' => $productColors
                 ));
         }
     }
