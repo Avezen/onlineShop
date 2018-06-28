@@ -9,36 +9,36 @@
         <button class="stepButton" id="colorsButton" disabled><div class="orderStep">Dostępne kolory ></div></button>
         <button class="stepButton" id="finishButton" disabled><div class="orderStep">Zamów </div></button>
     </div>
+    <div id="progressWindow">
+        <div class="progressStep" id="generalInfoStep" style="display: block;">
+            <form id="addProductForm" method="GET">
+                Nazwa: <input type="text" id="name" required/><br>
+                Opis: <input type="text" id="description"/><br>
+                Kategoria:  <select id="category">
+                    <option value="T-Shirt">T-Shirt</option>
+                    <option value="Hoodie">Hoodie</option>
+                    <option value="Spódnica">Spódnica</option>
+                    <option value="Jeansy">Jeansy</option>
+                </select><br>
+                Cena: <input type="text" id="price" required/><br>
+                <p></p>
+                Zdjęcie: <input type="text" id="photo"/><br>
+                Marka: <input type="text" id="brand"/><br>
+                Płeć: <select id="sex">
+                    <option value="male">Męskie</option>
+                    <option value="female">Żeńskie</option>
+                    <option value="male/female">Męskie/Żeńskie</option>
+                </select><br>
+                Pochodzenie: <input type="text" id="origin"/><br>
+                Materiały: <input type="text" id="materials"/><br>
 
-    <div class="progressStep" id="generalInfoStep" style="display: block;">
-        <form id="addProductForm" method="GET">
-            Nazwa: <input type="text" id="name" required/><br>
-            Opis: <input type="text" id="description"/><br>
-            Kategoria:  <select id="category">
-                <option value="T-Shirt">T-Shirt</option>
-                <option value="Hoodie">Hoodie</option>
-                <option value="Spódnica">Spódnica</option>
-                <option value="Jeansy">Jeansy</option>
-            </select><br>
-            Cena: <input type="text" id="price" required/><br>
-            <p></p>
-            Zdjęcie: <input type="text" id="photo"/><br>
-            Marka: <input type="text" id="brand"/><br>
-            Płeć: <select id="sex">
-                <option value="male">Męskie</option>
-                <option value="female">Żeńskie</option>
-                <option value="male/female">Męskie/Żeńskie</option>
-            </select><br>
-            Pochodzenie: <input type="text" id="origin"/><br>
-            Materiały: <input type="text" id="materials"/><br>
-
-            <button type="submit">Dodaj</button>
-        </form>
+                <button type="submit">Dodaj</button>
+            </form>
+        </div>
+        <div class="progressStep" id="sizesStep"></div>
+        <div class="progressStep" id="colorsStep"></div>
+        <div class="progressStep" id="finishStep"></div>
     </div>
-    <div class="progressStep" id="sizesStep"></div>
-    <div class="progressStep" id="colorsStep"></div>
-    <div class="progressStep" id="finishStep"></div>
-
 </div>
 {% endblock %}
 
@@ -56,7 +56,25 @@
                 return false;
             });
 
+            $('#progressWindow').on("change", ".addSize", function () {
+                addSize();
+            });
+
+
         });
+
+        function addSize(){
+            var size = document.getElementById('labelSizeXS');
+            size.remove();
+
+            var div = document.createElement("div");
+            div.className = "cos";
+            div.innerHTML = "Rozmiar 1:<input type='text'/> <br>" +
+                "Rozmiar 2:<input type='text'/><br>" +
+                "Rozmiar 3:<input type='text'/><br>";
+
+            document.getElementById("setSizes").appendChild(div);
+        }
 
         function postProductGeneralInfo(){
             var xhttp = new XMLHttpRequest();
@@ -74,7 +92,7 @@
             var btn = document.getElementById('sizesButton');
 
             if(!isNaN(price) && isFinite(price)){
-                var url = "{{ path('addproduct',
+                var url = "{{ path('setproductinfo',
                     {
                         'name': 'nameJS',
                         'description':'descriptionJS',

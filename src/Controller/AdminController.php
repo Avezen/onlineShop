@@ -22,7 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class AdminController extends FOSRestController
 {
     /**
-     * @Rest\Get("/addproduct/{name}/{description}/{category}/{price}/{photo}/{brand}/{sex}/{origin}/{materials}", name="addproduct")
+     * @Rest\Get("/setproductinfo/{name}/{description}/{category}/{price}/{photo}/{brand}/{sex}/{origin}/{materials}", name="setproductinfo")
      * @Security("is_granted('ROLE_ADMIN')")
      *
      */
@@ -61,7 +61,7 @@ class AdminController extends FOSRestController
      */
     public function addProductForm(){
 
-        return $this->render('Admin/addProduct.html.twig');
+        return $this->render('Admin/setProductInfo.html.twig');
     }
 
     /**
