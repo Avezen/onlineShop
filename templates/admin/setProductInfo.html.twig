@@ -4,14 +4,14 @@
 <div class="addProduct">
     Dodaj produkt:
     <div class="addProductProgress">
-        <button class="stepButton" id="generalInfoButton"><div class="orderStep">Informacje ogólne ></div></button>
-        <button class="stepButton" id="sizesButton" disabled><div class="orderStep">Dostępne rozmiary ></div></button>
-        <button class="stepButton" id="colorsButton" disabled><div class="orderStep">Dostępne kolory ></div></button>
-        <button class="stepButton" id="finishButton" disabled><div class="orderStep">Zamów </div></button>
+        <button class="stepButton" id="generalInfoButton"><div class="addProductStep">Informacje ogólne ></div></button>
+        <button class="stepButton" id="sizesButton" disabled><div class="addProductStep">Dostępne rozmiary ></div></button>
+        <button class="stepButton" id="colorsButton" disabled><div class="addProductStep">Dostępne kolory ></div></button>
+        <button class="stepButton" id="finishButton" disabled><div class="addProductStep">Dodaj produkt </div></button>
     </div>
     <div id="progressWindow">
         <div class="progressStep" id="generalInfoStep" style="display: block;">
-            <form id="addProductForm" method="GET">
+            <form id="setProductInfoForm" method="GET">
                 Nazwa: <input type="text" id="name" required/><br>
                 Opis: <input type="text" id="description"/><br>
                 Kategoria:  <select id="category">
@@ -38,6 +38,7 @@
         <div class="progressStep" id="sizesStep"></div>
         <div class="progressStep" id="colorsStep"></div>
         <div class="progressStep" id="finishStep"></div>
+        <div id="test"></div>
     </div>
 </div>
 {% endblock %}
@@ -45,7 +46,7 @@
 {% block javascripts %}
     <script>
         $(document).ready(function(){
-            $("#addProductForm").submit(function (event) {
+            $("#setProductInfoForm").submit(function (event) {
                 event.preventDefault();
                 postProductGeneralInfo();
                 return false;
@@ -57,24 +58,30 @@
             });
 
             $('#progressWindow').on("change", ".addSize", function () {
-                addSize();
+                addSize(this.value);
             });
 
+            $('#progressWindow').on("submit", "#setProductSizesForm", function (event) {
+                event.preventDefault();
+                postProductSizes();
+            });
 
+            $('#progressWindow').on("click", "#removeSize", function (event) {
+                event.preventDefault();
+                removeSize(this.value);
+            });
+
+            $('#progressWindow').on("click", ".addColor", function (event) {
+                event.preventDefault();
+                addColor(this.value);
+            });
+
+            $('#progressWindow').on("submit", "#setProductColorsForm", function (event) {
+                event.preventDefault();
+                postProductColors();
+            });
         });
 
-        function addSize(){
-            var size = document.getElementById('labelSizeXS');
-            size.remove();
-
-            var div = document.createElement("div");
-            div.className = "cos";
-            div.innerHTML = "Rozmiar 1:<input type='text'/> <br>" +
-                "Rozmiar 2:<input type='text'/><br>" +
-                "Rozmiar 3:<input type='text'/><br>";
-
-            document.getElementById("setSizes").appendChild(div);
-        }
 
         function postProductGeneralInfo(){
             var xhttp = new XMLHttpRequest();
@@ -119,7 +126,9 @@
                 xhttp.onreadystatechange = function() {
                     if(xhttp.readyState == 4 && xhttp.status == 200) {
                         btn.disabled = false;
-                        document.getElementById("sizesStep").innerHTML = xhttp.response;
+                        if(document.getElementById("sizesStep").innerHTML !== xhttp.response){
+                            document.getElementById("sizesStep").innerHTML = xhttp.response;
+                        }
                         document.getElementById("sizesStep").style.display = "block";
                         document.getElementById('generalInfoStep').style.display = "none";
                     }
@@ -129,8 +138,221 @@
             }else{
                 document.getElementsByTagName('p')[0].innerHTML = 'podaj liczbę';
             }
+        }
 
 
+        function addSize(value){
+            document.getElementById('labelSize'+value).style.display = "none";
+
+            var div = document.createElement("div");
+            div.className = "addedSize";
+            div.id = "addedSize"+value;
+            div.innerHTML = "<div id='"+value+"'>"+value+"</div>"+
+                "<button type='button' value='"+value+"' id='removeSize'>x</button>"+
+                "<br>Rozmiar 1:<input type='text' id='sizeID1'/><br>" +
+                "Rozmiar 2:<input type='text' id='sizeID2'/><br>" +
+                "Rozmiar 3:<input type='text' id='sizeID3'/><br><br>";
+
+            div.innerHTML = div.innerHTML.replace("sizeID1", value+"1");
+            div.innerHTML = div.innerHTML.replace("sizeID2", value+"2");
+            div.innerHTML = div.innerHTML.replace("sizeID3", value+"3");
+
+            document.getElementById("sizes").appendChild(div);
+        }
+
+
+        function removeSize(value){
+            document.getElementById("addedSize"+value).remove();
+            document.getElementById('labelSize'+value).style.display = "block";
+            document.getElementById('radioSize'+value).checked = false;
+        }
+
+
+        function postProductSizes(){
+            var xhttp = new XMLHttpRequest();
+            // Create some variables we need to send to our PHP file
+            var btn = document.getElementById('colorsButton');
+
+            var url = "{{ path('setproductsizes',
+                {
+                    'sizeXS': 'size1JS',
+                    'XSvalue1':'size1value1JS',
+                    'XSvalue2':'size1value2JS',
+                    'XSvalue3':'size1value3JS',
+                    'sizeS': 'size2JS',
+                    'Svalue1':'size2value1JS',
+                    'Svalue2':'size2value2JS',
+                    'Svalue3':'size2value3JS',
+                    'sizeM': 'size3JS',
+                    'Mvalue1':'size3value1JS',
+                    'Mvalue2':'size3value2JS',
+                    'Mvalue3':'size3value3JS',
+                    'sizeL': 'size4JS',
+                    'Lvalue1':'size4value1JS',
+                    'Lvalue2':'size4value2JS',
+                    'Lvalue3':'size4value3JS',
+                    'sizeXL': 'size5JS',
+                    'XLvalue1':'size5value1JS',
+                    'XLvalue2':'size5value2JS',
+                    'XLvalue3':'size5value3JS',
+                    'sizeXXL': 'size6JS',
+                    'XXLvalue1':'size6value1JS',
+                    'XXLvalue2':'size6value2JS',
+                    'XXLvalue3':'size6value3JS',
+                })
+            }}";
+
+            url = checkSize("XS",url,1);
+            url = checkSize("S",url,2);
+            url = checkSize("M",url,3);
+            url = checkSize("L",url,4);
+            url = checkSize("XL",url,5);
+            url = checkSize("XXL",url,6);
+
+            xhttp.onreadystatechange = function() {
+                if(xhttp.readyState == 4 && xhttp.status == 200) {
+                    btn.disabled = false;
+                    if(document.getElementById("colorsStep").innerHTML !== xhttp.response){
+                        document.getElementById("colorsStep").innerHTML = xhttp.response;
+                    }
+                    document.getElementById("colorsStep").style.display = "block";
+                    document.getElementById('sizesStep').style.display = "none";
+                }
+            };
+            xhttp.open("GET", url, false);
+            xhttp.send();
+
+        }
+
+
+        function checkSize(size, url, number){
+            if(document.getElementById(size+'1') === null){
+                url = url.replace("size"+number+"JS", "null");
+                url = url.replace("size"+number+"value1JS", null);
+                url = url.replace("size"+number+"value2JS", null);
+                url = url.replace("size"+number+"value3JS", null);
+            }else {
+                url = url.replace("size"+number+"JS", size);
+                if(document.getElementById(size+1).value !== "")
+                    url = url.replace("size"+number+"value1JS", document.getElementById(size+1).value);
+                else
+                    url = url.replace("size"+number+"value1JS", null);
+
+                if(document.getElementById(size+2).value !== "")
+                    url = url.replace("size"+number+"value2JS", document.getElementById(size+2).value);
+                else
+                    url = url.replace("size"+number+"value2JS", null);
+
+                if(document.getElementById(size+3).value !== "")
+                    url = url.replace("size"+number+"value3JS", document.getElementById(size+3).value);
+                else
+                    url = url.replace("size"+number+"value3JS", null);
+            }
+            return url;
+        }
+
+
+        let ixs = 0;
+        let is = 0;
+        let im = 0;
+        let il = 0;
+        let ixl = 0;
+        let ixxl = 0;
+
+        function addColor(size){
+            var input = document.createElement("INPUT");
+
+            if(size === "XS"){
+                ixs += 1;
+                input.className = "addedColor"+size;
+                input.id = "addedColor"+size+ixs;
+                input.setAttribute("type", "text");
+            }else if(size === "S"){
+                is += 1;
+                input.className = "addedColor"+size;
+                input.id = "addedColor"+size+is;
+                input.setAttribute("type", "text");
+            }else if(size === "M"){
+                im += 1;
+                input.className = "addedColor"+size;
+                input.id = "addedColor"+size+im;
+                input.setAttribute("type", "text");
+            }else if(size === "L"){
+                il += 1;
+                input.className = "addedColor"+size;
+                input.id = "addedColor"+size+il;
+                input.setAttribute("type", "text");
+            }else if(size === "XL"){
+                ixl += 1;
+                input.className = "addedColor"+size;
+                input.id = "addedColor"+size+ixl;
+                input.setAttribute("type", "text");
+            }else if(size === "XXL"){
+                ixxl += 1;
+                input.className = "addedColor"+size;
+                input.id = "addedColor"+size+ixxl;
+                input.setAttribute("type", "text");
+            }
+
+            document.getElementById(size+"Colors").appendChild(input);
+        }
+
+
+        function postProductColors(){
+            var xhttp = new XMLHttpRequest();
+
+            var btn = document.getElementById('finishButton');
+
+            var url = "{{ path('setproductcolors',
+                {
+                    'sizeXS': 'sizeXSJS',
+                    'sizeS': 'sizeSJS',
+                    'sizeM': 'sizeMJS',
+                    'sizeL': 'sizeLJS',
+                    'sizeXL': 'sizeXLJS',
+                    'sizeXXL': 'sizeXXLJS',
+                })
+            }}";
+
+            url = addColorsToSize("XS",url);
+            url = addColorsToSize("S",url);
+            url = addColorsToSize("M",url);
+            url = addColorsToSize("L",url);
+            url = addColorsToSize("XL",url);
+            url = addColorsToSize("XXL",url);
+
+            xhttp.onreadystatechange = function() {
+                if(xhttp.readyState == 4 && xhttp.status == 200) {
+                    btn.disabled = false;
+                    if(document.getElementById("finishStep").innerHTML !== xhttp.response) {
+                        document.getElementById("finishStep").innerHTML = xhttp.response;
+                    }
+                    document.getElementById("finishStep").style.display = "block";
+                    document.getElementById('colorsStep').style.display = "none";
+                }
+            };
+            xhttp.open("GET", url, false);
+            xhttp.send();
+
+        }
+
+
+        function addColorsToSize(size, url){
+            var colorslength = document.getElementsByClassName('addedColor'+size).length;
+            var sizeColors = "";
+            if(colorslength !== 0) {
+                for (var i = 0; i < colorslength; i++) {
+                    if(i === colorslength-1){
+                        sizeColors += document.getElementsByClassName('addedColor' + size)[i].value;
+                    }else{
+                        sizeColors += document.getElementsByClassName('addedColor' + size)[i].value + "&";
+                    }
+                }
+                url = url.replace("size" + size + "JS", sizeColors);
+            }else{
+                url = url.replace("size" + size + "JS", "null");
+            }
+            return url;
         }
 
         function showStep(id){

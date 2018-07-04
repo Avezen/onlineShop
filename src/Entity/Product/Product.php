@@ -2,6 +2,7 @@
 
 namespace App\Entity\Product;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -206,7 +207,7 @@ class Product
         return $this;
     }
 
-    public function getSize(): ?Size
+    public function getSize(): ?Collection
     {
         return $this->Size;
     }

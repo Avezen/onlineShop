@@ -2,7 +2,7 @@
 fos_rest:
     format_listener:
         rules:
-            - { path: ^/login, prefer_extension: true, fallback_format: json, priorities: [ html ] }
+            - { path: ^/setproductcolors/, prefer_extension: true, fallback_format: json, priorities: [ html ] }
             - { path: ^/, prefer_extension: true, fallback_format: json, priorities: [ html ] }
 
     body_listener: true

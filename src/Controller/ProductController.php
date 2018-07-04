@@ -24,14 +24,25 @@ class ProductController extends FOSRestController
     /**
      * @Rest\Get("/", name="main")
      */
-    public function getProducts()
+    public function getProducts(Request $request)
     {
         $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $products,
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit',5)
+        );
+
+        $pagination->setCustomParameters(array(
+            'align' => 'center',
+        ));
 
         if ($products === null) {
             return new View("there are no products exist", Response::HTTP_NOT_FOUND);
         }else{
-            return $this->render('product/index.html.twig', array("products" => $products));
+            return $this->render('product/index.html.twig', array("products" => $pagination));
             }
     }
 
@@ -43,8 +54,16 @@ class ProductController extends FOSRestController
         $product = $this->getDoctrine()->getRepository(Product::class)->find($id);
         $productReviews = $this->getDoctrine()->getRepository(Review::class)->findBy(['Product' => $id]);
         $productSizes = $this->getDoctrine()->getRepository(Size::class)->findBy(['Product' => $product->getId()]);
-        $productColors = $this->getDoctrine()->getRepository(Color::class)->findBy(['Size' => $productSizes[1]->getId()]);
+        $productColors = 0;
 
+        for($i=0; $i<count($productSizes); $i++) {
+            if ($i === 0) {
+                $productColors = $this->getDoctrine()->getRepository(Color::class)->findBy(['Size' => $productSizes[$i]->getId()]);
+            }else{
+                $productColors[$i] = $this->getDoctrine()->getRepository(Color::class)->findBy(['Size' => $productSizes[$i]->getId()]);
+                $productColors = $productColors + $productColors[$i];
+            }
+        }
 
 
         if ($product === null) {
@@ -76,31 +95,53 @@ class ProductController extends FOSRestController
     /**
      * @Rest\Get("products/category/{category}", name="productsCategory")
      */
-    public function getProductsByCategory($category)
+    public function getProductsByCategory(Request $request, $category)
     {
         $product = $this->getDoctrine()->getRepository(Product::class)->findBy(['Category' => $category]);
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $product,
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit',5)
+        );
+
+        $pagination->setCustomParameters(array(
+            'align' => 'center',
+        ));
 
         if ($product === null) {
             return new View("Product category: ".$category." doesn't exist", Response::HTTP_NOT_FOUND);
         }else{
-            return $this->render('product/index.html.twig', array('products' => $product));
+            return $this->render('product/index.html.twig', array('products' => $pagination));
         }
     }
 
     /**
      * @Rest\Get("products/category/{category}/{brand}", name="productsCategoryBrand")
      */
-    public function getProductsByCategoryAndBrand($category, $brand)
+    public function getProductsByCategoryAndBrand(Request $request, $category, $brand)
     {
         $product = $this->getDoctrine()->getRepository(Product::class)->findBy([
             'Category' => $category,
             'Brand' => $brand,
         ]);
 
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $product,
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit',5)
+        );
+
+        $pagination->setCustomParameters(array(
+            'align' => 'center',
+        ));
+
         if ($product === null) {
             return new View("Product category: ".$category." doesn't exist", Response::HTTP_NOT_FOUND);
         }else{
-            return $this->render('product/index.html.twig', array('products' => $product));
+            return $this->render('product/index.html.twig', array('products' => $pagination));
         }
     }
 
@@ -117,6 +158,8 @@ class ProductController extends FOSRestController
             return $this->render('product/index.html.twig', array('products' => $product));
         }
     }
+
+
 
 
 

@@ -1,0 +1,93 @@
+<form method="POST" action="{{ path('addnewproduct') }}">
+    Informacje ogólne:<br>
+    Nazwa: {{ app.session.get('productGeneralInfo').name }}<br>
+    Opis: {{ app.session.get('productGeneralInfo').description }}<br>
+    Kategoria: {{ app.session.get('productGeneralInfo').category }}<br>
+    Cena: {{ app.session.get('productGeneralInfo').price }}<br>
+    Marka: {{ app.session.get('productGeneralInfo').brand }}<br>
+    Płeć: {{ app.session.get('productGeneralInfo').sex }}<br>
+    Pochodzenie: {{ app.session.get('productGeneralInfo').origin }}<br>
+    Materiały: {{ app.session.get('productGeneralInfo').materials }}<br>
+
+    <br>
+    Dostępne rozmiary i kolory:<br>
+    {% if colors.XS is not defined %}
+    {% else %}
+        {% set ixs = 1 %}
+        Rozmiar: XS<br><br>
+        Długość 1: {{ app.session.get('sizes').XS.size_one }}<br>
+        Długość 2: {{ app.session.get('sizes').XS.size_two }}<br><br>
+        {% for color in colors.XS %}
+        Kolor {{ ixs }}:{{ color }}<br>
+
+            {% set ixs = ixs+1 %}
+        {% endfor %}
+    {% endif %}
+
+    {% if colors.S is not defined %}
+    {% else %}
+        {% set iss = 1 %}
+        Rozmiar: S<br>
+        Długość 1: {{ app.session.get('sizes').S.size_one }}<br>
+        Długość 2: {{ app.session.get('sizes').S.size_two }}<br>
+        {% for color in colors.S %}
+            Kolor {{ iss }}:{{ color }}<br>
+            <br>
+            {% set iss = iss + 1 %}
+        {% endfor %}
+    {% endif %}
+
+    {% if colors.M is not defined %}
+    {% else %}
+        {% set im = 1 %}
+        Rozmiar: M<br><br>
+        Długość 1: {{ app.session.get('sizes').M.size_one }}<br>
+        Długość 2: {{ app.session.get('sizes').M.size_two }}<br><br>
+        {% for color in colors.M %}
+           Kolor {{ im }}: {{ color }}<br>
+            <br>
+            {% set im = im + 1 %}
+        {% endfor %}
+    {% endif %}
+
+    {% if colors.L is not defined %}
+    {% else %}
+        {% set il = 1 %}
+        Rozmiar: L<br><br>
+        Długość 1: {{ app.session.get('sizes').L.size_one }}<br>
+        Długość 2: {{ app.session.get('sizes').L.size_two }}<br><br>
+        {% for color in colors.L %}
+            Kolor{{ il }}:{{ color }}<br>
+            <br>
+            {% set il = il + 1 %}
+        {% endfor %}
+    {% endif %}
+
+    {% if colors.XL is not defined %}
+    {% else %}
+        {% set ixl = 1 %}
+        Rozmiar: XL<br><br>
+        Długość 1: {{ app.session.get('sizes').XL.size_one }}<br>
+        Długość 2: {{ app.session.get('sizes').XL.size_two }}<br><br>
+        {% for color in colors.XL %}
+            Kolor {{ ixl }}:{{ color }}<br>
+            {% set ixl = ixl + 1 %}
+        {% endfor %}
+    {% endif %}
+
+    {% if colors.XXL is not defined %}
+    {% else %}
+        {% set ixxl = 1 %}
+        Rozmiar: XXL<br><br>
+        Długość 1: {{ app.session.get('sizes').XXL.size_one }}<br>
+        Długość 2: {{ app.session.get('sizes').XXL.size_two }}<br><br>
+        {% for color in colors.XXL %}
+            Kolor{{ ixxl }}:{{ color }}<br>
+            <br>
+            {% set ixxl = ixxl + 1 %}
+        {% endfor %}
+    {% endif %}
+    <button>Dodaj</button>
+</form>
+
+

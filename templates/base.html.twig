@@ -5,15 +5,18 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-            <link href="{{ asset('styles/mainpage.css') }}" rel="stylesheet" >
-            <link href="{{ asset('styles/modal.css') }}" rel="stylesheet" >
+            <link href="{{ asset('build/css/mainpage.css') }}" rel="stylesheet" >
+            <link href="{{ asset('build/css/modal.css') }}" rel="stylesheet" >
         {% endblock %}
     </head>
     <body id="body">
         {% block header %}
             <header>
+                <nav>
+
+                </nav>
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="http://127.0.0.1:8000/">Main Page</a>
+                    <a class="navbar-brand" href="{{ path('main') }}">Main Page</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -34,7 +37,7 @@
                                     <a class="dropdown-item" href="{{ path('productsCategory', {'category':'T-Shirt'}) }}">T-Shirt</a>
                                     <a class="dropdown-item" href="{{ path('productsCategory', {'category':'Hoodie'}) }}">Hoodie</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Spódnica</a>
+                                    <a class="dropdown-item" href="{{ path('productsCategory', {'category':'Spódnica'}) }}">Spódnica</a>
                                 </div>
                             </li>
                             <li class="nav-item">
@@ -44,6 +47,12 @@
                                 <a class="nav-link" id="showCart">Koszyk <div id="cartCount">
                                         {{ app.session.get('shoppingCart')|length }}  </div></a>
                             </li>
+
+                            {% if is_granted("ROLE_ADMIN") %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('adminpanel') }}" >Panel Admina</a>
+                                </li>
+                            {% endif %}
                             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                                 {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
                                 <a href="{{ path('fos_user_security_logout') }}">
@@ -51,27 +60,18 @@
                                 </a>
                             {% else %}
                                 <li class="nav-item">
-                                    <a class="nav-link" id="login">Zaloguj się</a>
+                                    <a class="nav-link login" id="login">Zaloguj się</a>
                                 </li>
                             {% endif %}
-                            {% if is_granted("ROLE_ADMIN") %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('adminpanel') }}" >Panel Admina</a>
-                                </li>
-                            {% endif %}
-
+                            <div id="loginform" style="display: none"></div>
                         </ul>
 
-                        <form class="form-inline my-2 my-lg-0">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                        </form>
                     </div>
                 </nav>
             </header>
         {% endblock %}
         <div class="shopppingCart" id="shoppingCart"></div>
-        <div id="loginform" style="display: none"></div>
+
         <main>
         {% block body %}{% endblock %}
         </main>
@@ -106,6 +106,7 @@
                         xhttp.open("GET", {{ path('fos_user_security_login') }}, false);
                         xhttp.send();
                     }
+                    document.getElementById('login').style.display="none";
                     loginform.style.display = "block";
                 }else{
                     loginform.style.display = "none";

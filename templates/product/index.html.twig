@@ -20,6 +20,12 @@
     <div class="prContainer" id="prContainer">
     {% for product in products %}
         <div id="prWid{{ product.id }}" class="prWindow" >
+            {% if is_granted("ROLE_ADMIN") %}
+                <form id="deleteProduct" method="POST" action="{{ path('deleteProduct') }}">
+                    <input hidden name="productIdToDelete" value="{{ product.id }}"/>
+                    <button onclick="event.stopPropagation()">x</button>
+                </form>
+            {% endif %}
             <div class="prTitle"> <h5>{{ product.name }}</h5></div>
             <div class="prPhoto"></div>
             <div class="prUnderPhoto">
@@ -29,6 +35,11 @@
         </div>
     {% endfor %}
     </div>
+    <div style="clear:both"></div><br>
+    <div style="z-index: 0" class="navigation text-center">
+        {{ knp_pagination_render(products) }}
+    </div>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -58,6 +69,10 @@
                 showOptions('delivery',this.id.replace("deliveryRadioLabel", ""));
             });
 
+            $('.modal-content').on("change", ".sizeRadio", function () {
+                showColors(this.value);
+            });
+
 
         });
 
@@ -71,7 +86,21 @@
                 login();
                 return false;
             });
+
         });
+
+        function showColors(size){
+            var labels = document.getElementsByClassName('labl size '+size);
+            var labs = document.getElementsByClassName('labl size');
+
+            for(var j=0; j<labs.length; j++){
+                labs[j].style.display = "none";
+            }
+
+            for(var i=0; i<labels.length; i++){
+                labels[i].style.display = "block";
+            }
+        }
 
         function login(){
             var xhttp = new XMLHttpRequest();
@@ -221,9 +250,9 @@
             xhttp.send();
         }
 
-        function findCheckedSize(){
+        function findCheckedRadio(classname){
             var checkedValue = null;
-            var inputElements = document.getElementsByClassName('sizeRadio');
+            var inputElements = document.getElementsByClassName(classname);
             for(var i=0; inputElements[i]; ++i){
                 if(inputElements[i].checked){
                     checkedValue = inputElements[i].value;

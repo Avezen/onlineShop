@@ -36,6 +36,18 @@ class Color
         return $this->id;
     }
 
+    public function getSize(): ?Size
+    {
+        return $this->Size;
+    }
+
+    public function setSize(Size $Size): self
+    {
+        $this->Size = $Size;
+
+        return $this;
+    }
+
     public function getColor(): ?string
     {
         return $this->Color;

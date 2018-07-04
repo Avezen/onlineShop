@@ -165,7 +165,7 @@ class OrderController extends FOSRestController
         $em->persist($address);
         $order->setPackageMethod($packageMethod);
         $order->setPaymentMethod($paymentMethod);
-        $order->setStatus("Zamówiono");
+        $order->setStatus("Zapłacone");
         $order->setAddress($address);
 
 

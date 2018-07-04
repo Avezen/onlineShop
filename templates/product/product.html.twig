@@ -12,7 +12,7 @@
         Dostępne rozmiary:
         {% for productSize in productSizes %}
         <label class="labl">
-            <input class="sizeRadio" type="radio" name="radioname" value="{{ productSize.name }}"/>
+            <input class="sizeRadio" type="radio" name="sizeRadio" value="{{ productSize.name }}"/>
             <div>
                 {{ productSize.name }}
             </div>
@@ -20,14 +20,21 @@
         {% endfor %}
         <br>
         Dostępne kolory:
-        {% for productColor in productColors %}
-            {{ productColor.Color }}
+        {% for sizes in product.size %}
+            {% for size in sizes.color %}
+                <label style="display: none;" class="labl size {{ sizes.name }}">
+                    <input  class="colorRadio" type="radio" name="colorRadio" value="{{ size.color }}"/>
+                    <div>
+                        {{ size.color }}
+                    </div>
+                </label>
+            {% endfor %}
         {% endfor %}
         <br>
         <input type="number" id="quantityOf{{ product.id }}" value="1">
         <div id="price" class="mPrPrice" style="float:left">{{ product.price }} zł </div>
         <div style="clear:both"></div>
-        <button id="addToCartButton" onclick="addToCart('{{ product.id }}','{{ product.name }}', getQuantity({{ product.id }}),findCheckedSize(),'niebieski', {{ product.price }}); event.stopPropagation()">dodaj do koszyka</button>
+        <button id="addToCartButton" onclick="addToCart('{{ product.id }}','{{ product.name }}', getQuantity({{ product.id }}),findCheckedRadio('sizeRadio'),findCheckedRadio('colorRadio'), {{ product.price }}); event.stopPropagation()">dodaj do koszyka</button>
         <div class="successfullyAdded" id="successfullyAdded{{ product.id }}" style="display:none">Pomyślnie dodano produkt</div>
     </div>
 </div>

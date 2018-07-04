@@ -3,6 +3,7 @@
 namespace App\Entity\Product;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -54,6 +55,17 @@ class Size
         return $this->id;
     }
 
+    public function getProduct(): ?Product
+    {
+        return $this->Product;
+    }
+
+    public function setProduct(Product $Product): self
+    {
+        $this->Product = $Product;
+
+        return $this;
+    }
 
     public function getName(): ?string
     {
@@ -103,7 +115,7 @@ class Size
         return $this;
     }
 
-    public function getColor(): ?Color
+    public function getColor(): ?Collection
     {
         return $this->Color;
     }

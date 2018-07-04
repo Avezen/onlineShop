@@ -174,7 +174,9 @@
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) {
                 btn.disabled = false;
-                document.getElementById("deliveryStep").innerHTML = xhttp.response;
+                if(document.getElementById("deliveryStep").innerHTML === ""){
+                    document.getElementById("deliveryStep").innerHTML = xhttp.response;
+                }
                 document.getElementById("deliveryStep").style.display = "block";
                 document.getElementById('addressStep').style.display = "none";
             }
@@ -195,8 +197,12 @@
         }
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("paymentStep").innerHTML = xhttp.response;
                 document.getElementById('paymentButton').disabled = false;
+
+                if(document.getElementById("paymentStep").innerHTML === ""){
+                    document.getElementById("paymentStep").innerHTML = xhttp.response;
+                }
+
                 document.getElementById("paymentStep").style.display = "block";
                 document.getElementById('deliveryStep').style.display = "none";
             }
@@ -222,8 +228,11 @@
         }
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("finishStep").innerHTML = xhttp.response;
                 document.getElementById('finishButton').disabled = false;
+
+                if(document.getElementById("finishStep").innerHTML === ""){
+                    document.getElementById("finishStep").innerHTML = xhttp.response;
+                }
                 document.getElementById("finishStep").style.display = "block";
                 document.getElementById('paymentStep').style.display = "none";
             }
