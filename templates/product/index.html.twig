@@ -26,11 +26,10 @@
                     <button onclick="event.stopPropagation()">x</button>
                 </form>
             {% endif %}
-            <div class="prTitle"> <h5>{{ product.name }}</h5></div>
             <div class="prPhoto"></div>
             <div class="prUnderPhoto">
+                <div class="prTitle"> <h5>{{ product.name }}</h5></div>
                 <div class="prPrice">{{ product.price }} zł</div>
-                <div class="prAddtoCartBtn"><button onclick="event.stopPropagation();addToCart('{{ product.id }}', '{{ product.name }}', getQuantity({{ product.id }}),findCheckedSize(),'niebieski', {{ product.price }}) ">dodaj</button></div>
             </div>
         </div>
     {% endfor %}

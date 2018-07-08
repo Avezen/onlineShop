@@ -7,14 +7,47 @@
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
             <link href="{{ asset('build/css/mainpage.css') }}" rel="stylesheet" >
             <link href="{{ asset('build/css/modal.css') }}" rel="stylesheet" >
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         {% endblock %}
     </head>
     <body id="body">
         {% block header %}
             <header>
-                <nav>
+                <nav class="navbar navbar-expand-lg" id="navbarExpandLg">
 
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-reorder"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul>
+                            <li>
+                                <a class="nav-bar-text-button" href="#">Nowości</a>
+                            </li>
+                            <li>
+                                <a class="nav-bar-text-button" href="#">Popularne</a>
+                            </li>
+                            <li>
+                                <a class="nav-bar-text-button" href="#">Kategorie</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="right-nav-bar">
+                            <div class="circle">
+                                <a class="nav-bar-circle-button" id="showCart" href=""><i class="fa fa-cart-arrow-down"></i></a>
+                            </div>
+                            <div class="login-form" id="loginform" style="display: none"></div>
+                            <div class="circle">
+                                <a class="nav-bar-circle-button" id="login" href=""><i style="padding-left: 5px" class="fa fa-user-o"></i></a>
+                            </div>
+                    </div>
                 </nav>
+                <div class="nav-underline"></div>
+                <div class="page-title">
+                    <div class="line"></div>
+                    <label class="label"> NOWOŚCI </label>
+                    <div class="line"></div>
+                </div>
+                <!--
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <a class="navbar-brand" href="{{ path('main') }}">Main Page</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,6 +101,7 @@
 
                     </div>
                 </nav>
+                -->
             </header>
         {% endblock %}
         <div class="shopppingCart" id="shoppingCart"></div>
