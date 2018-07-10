@@ -10,9 +10,18 @@
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         {% endblock %}
     </head>
+
     <body id="body">
+        <div class="background-image"></div>
+        <main>
+
         {% block header %}
-            <header>
+            <div class="logo">
+                <a href="{{ path('main') }}"></a>
+            </div>
+            <header id="header">
+
+                <div class="header-background"></div>
                 <nav class="navbar navbar-expand-lg" id="navbarExpandLg">
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,9 +35,22 @@
                             <li>
                                 <a class="nav-bar-text-button" href="#">Popularne</a>
                             </li>
-                            <li>
-                                <a class="nav-bar-text-button" href="#">Kategorie</a>
+                            <li class="nav-item dropdown" style="border-right: solid 0px">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Kategorie
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ path('productsCategory', {'category':'T-Shirt'}) }}">T-shirt</a>
+                                    <a class="dropdown-item" href="{{ path('productsCategory', {'category':'Hoodie'}) }}">Hoodie</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Wysłane</a>
+                                </div>
                             </li>
+                            {% if is_granted("ROLE_ADMIN") %}
+                                <li style="border-left: solid 1px deepskyblue; border-right: solid 0px; margin-left:-5px; padding-left:10px">
+                                    <a class="nav-bar-text-button" href="{{ path('adminpanel') }}" >Panel Admina</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                     <div class="right-nav-bar">
@@ -36,17 +58,23 @@
                                 <a class="nav-bar-circle-button" id="showCart" href=""><i class="fa fa-cart-arrow-down"></i></a>
                             </div>
                             <div class="login-form" id="loginform" style="display: none"></div>
-                            <div class="circle">
+                        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                            <div class="circle" style="margin-right: 20px" >
                                 <a class="nav-bar-circle-button" id="login" href=""><i style="padding-left: 5px" class="fa fa-user-o"></i></a>
                             </div>
+                        {% else %}
+                            <div class="circle" style="margin-right: 20px" >
+                                <a class="nav-bar-circle-button" id="login" href=""><i style="padding-left: 5px" class="fa fa-user-o"></i></a>
+                            </div>
+                        {% endif %}
+
                     </div>
                 </nav>
-                <div class="nav-underline"></div>
-                <div class="page-title">
-                    <div class="line"></div>
-                    <label class="label"> NOWOŚCI </label>
-                    <div class="line"></div>
-                </div>
+
+                <div id="underline" class="nav-underline"></div>
+
+
+
                 <!--
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <a class="navbar-brand" href="{{ path('main') }}">Main Page</a>
@@ -104,11 +132,14 @@
                 -->
             </header>
         {% endblock %}
-        <div class="shopppingCart" id="shoppingCart"></div>
+            <div class="shopppingCart" id="shoppingCart"></div>
+        {% block body %}
 
-        <main>
-        {% block body %}{% endblock %}
-        </main>
+        {% endblock %}
+            </div>
+
+         </main>
+        </body>
         {% block footer %}{% endblock %}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -116,7 +147,7 @@
         <script>
             $(document).ready(function() {
                 $("#showCart").click(function () {
-                    showShoppingCart();
+                    myFunction();
                     return false;
                 });
 
@@ -124,10 +155,30 @@
                     login();
                     return false;
                 });
+
+
             });
 
+
+            $(window).scroll(function () {
+                myFunction();
+            });
+
+            var header = document.getElementById("header");
+            var sticky = header.offsetTop;
+
+            function myFunction() {
+
+                if (window.pageYOffset > sticky) {
+                    header.classList.add("sticky");
+                } else {
+                    header.classList.remove("sticky");
+                }
+            }
+
+
             function login(){
-                var xhttp = new XMLHttpRequest();
+                const xhttp = new XMLHttpRequest();
                 var loginform = document.getElementById('loginform');
                 if(loginform.style.display === "none"){
                     if(loginform.innerHTML === ""){
@@ -146,6 +197,8 @@
                     loginform.style.display = "none";
                 }
             }
+
+
 
             function showShoppingCart(){
                 var cart = document.getElementById('shoppingCart');
@@ -167,9 +220,60 @@
                     cart.style.display = 'none';
                 }
             }
+
+
         </script>
 
+        <script>
+            var slideIndex = 1;
+            showSlides(slideIndex);
+
+
+
+            // Next/previous controls
+            function plusSlides(n) {
+                showSlides(slideIndex += n);
+            }
+
+            // Thumbnail image controls
+            function currentSlide(n) {
+                showSlides(slideIndex = n);
+            }
+
+            var slideShow = 0;
+            automaticSlides();
+
+            function automaticSlides() {
+                var i;
+                var slides = document.getElementsByClassName("mySlides fading");
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                }
+                slideShow++;
+                if (slideShow > slides.length) {slideShow = 1}
+                slides[slideShow-1].style.display = "block";
+                setTimeout(automaticSlides, 8000); // Change image every 2 seconds
+            }
+
+            function showSlides(n) {
+                var i;
+                var slides = document.getElementsByClassName("mySlides fading");
+                var dots = document.getElementsByClassName("dot");
+                if (n > slides.length) {slideIndex = 1}
+                if (n < 1) {slideIndex = slides.length}
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                }
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" active", "");
+                }
+                slides[slideIndex-1].style.display = "block";
+                dots[slideIndex-1].className += " active";
+
+            }
+        </script>
         {% block javascripts %}
             {% endblock %}
     </body>
+</div>
 </html>
