@@ -173,7 +173,7 @@ class OrderController extends FOSRestController
         $em->flush();
 
 
-        for($i=0; $i<count($cart); $i++){
+        for($i=0; $i<count($cart); $i++) {
             $orderDetails = new OrderDetails();
 
             $orderDetails->setColor($cart[$i]["color"]);
@@ -185,13 +185,9 @@ class OrderController extends FOSRestController
             $em->flush();
 
 
-
         }
-
-
-
-
         return $this->render('order/finishOrder.html.twig');
-
     }
+
+
 }

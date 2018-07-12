@@ -103,7 +103,7 @@ class ProductController extends FOSRestController
         $pagination = $paginator->paginate(
             $product,
             $request->query->getInt('page', 1),
-            $request->query->getInt('limit',5)
+            $request->query->getInt('limit',6)
         );
 
         $pagination->setCustomParameters(array(

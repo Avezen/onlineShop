@@ -1,14 +1,15 @@
 {% extends 'admin/index.html.twig' %}
 
 {% block body %}
-    <div class="orderList">
-        <table>
-            <tr>
+    <div class="orderList" style="border-radius: 10px;">
+        <table cellpadding="5px" border="1" rules="cols">
+            <tr class="tableHead">
                 <td>Id</td>
                 <td>Status</td>
                 <td>Szczegóły</td>
                 <td>Adres</td>
                 <td>Metoda dostawy</td>
+                <td>Zmień status</td>
             </tr>
             {% for order in orders %}
 
@@ -20,12 +21,35 @@
                  </td>
                  <td>{{ order.address.streetnr }}</td>
                  <td>{{ order.packageMethod.method }}</td>
+                 <td>
+                     {% if order.status == "Niezapłacone" %}
+                     <select>
+                         <option value="volvo">Zapłacone</option>
+                         <option value="saab">Przygotowane do wysyłki</option>
+                         <option value="mercedes">Wysłane</option>
+                     </select>
+                     {% elseif order.status == "Zapłacone" %}
+                         <select>
+                             <option value="volvo">Przygotowane do wysyłki</option>
+                             <option value="saab">Wysłane</option>
+                             <option value="audi">Niezapłacone</option>
+                         </select>
+                     {% elseif order.status == "Przygotowane do wysyłki" %}
+                         <select>
+                             <option value="volvo">Wysłane</option>
+                             <option value="saab">Niezapłacone</option>
+                             <option value="mercedes">Zapłacone</option>
+                         </select>
+                     {% endif %}
+                     <button type="button" id="patchOrderStatus">Uaktualnij</button>
+                     <div id="test"></div>
+                 </td>
              </tr>
              <tr>
                  <td colspan="2"></td>
                  <td colspan="3">
                     <div id="details{{ order.id }}" style="display: none;">
-                        <table>
+                        <table cellpadding="5px">
                             <tr>
                                 <td>Nazwa</td>
                                 <td>Rozmiar</td>
@@ -57,6 +81,15 @@
             showProductDetails();
             return false;
         });
+
+        $('#patchOrderStatus').click(function(){
+            patchOrderStatus();
+            return false;
+        });
+
+        function patchOrderStatus() {
+
+        }
 
         function showProductDetails(id){
             var details = document.getElementById('details'+id);

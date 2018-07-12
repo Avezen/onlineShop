@@ -292,7 +292,20 @@ class AdminController extends FOSRestController
         }
 
 
+
         return $this->redirect($this->generateUrl('main'));
+
+    }
+
+    /**
+     * @Rest\Put("/updateOrderStatus", name="updateOrderStatus")
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function updateOrderStatus(Request $request)
+    {
+        $order = new Orders();
+        $em = $this->getDoctrine()->getManager();
+        $order = $em->getRepository(Orders::class)->find($id);
 
     }
 }

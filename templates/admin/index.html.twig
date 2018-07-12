@@ -32,7 +32,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ path('orders', {'status':'Zapłacone'}) }}">Zapłacone</a>
-                        <a class="dropdown-item" href="{{ path('orders', {'status':'Zamówiono'}) }}">Zamówiono</a>
+                        <a class="dropdown-item" href="{{ path('orders', {'status':'Niezapłacone'}) }}">Niezapłacone</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Wysłane</a>
                     </div>
@@ -70,11 +70,11 @@
 
     });
 
-    function addNewProduct(){
+    function addNewProduct() {
         var main = document.getElementsByTagName('main');
         var form = document.getElementById('addProductForm');
 
-        if(!main[0].contains(form)){
+        if (!main[0].contains(form)) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
@@ -84,7 +84,28 @@
             xhttp.open("GET", "{{ path('addProductForm') }}", false);
             xhttp.send();
         }
+    }
 
+
+
+    function login(){
+        const xhttp = new XMLHttpRequest();
+        var loginform = document.getElementById('loginform');
+        if(loginform.style.display === "none"){
+            if(loginform.innerHTML === ""){
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        loginform.innerHTML = this.responseText;
+                    }
+                };
+                xhttp.open("GET", {{ path('fos_user_security_login') }}, false);
+                xhttp.send();
+            }
+            document.getElementById('login').style.display="none";
+            loginform.style.display = "block";
+        }else{
+            loginform.style.display = "none";
+        }
     }
 
 
