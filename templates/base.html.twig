@@ -43,7 +43,7 @@
                                     <a class="dropdown-item" href="{{ path('productsCategory', {'category':'T-Shirt'}) }}">T-shirt</a>
                                     <a class="dropdown-item" href="{{ path('productsCategory', {'category':'Hoodie'}) }}">Hoodie</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Wysłane</a>
+                                    <a class="dropdown-item" href="{{ path('main') }}">Wszystkie</a>
                                 </div>
                             </li>
                             {% if is_granted("ROLE_ADMIN") %}

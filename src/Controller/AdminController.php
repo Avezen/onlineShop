@@ -213,10 +213,10 @@ class AdminController extends FOSRestController
 
             if($value["size_one"] !== NULL)
                 $size->setSizeOne($value["size_one"]);
-            if($value["size_two"] !== NULL)
+            if($value["size_two"] !== "null")
                 $size->setSizeTwo($value["size_two"]);
-            if($value["size_three"] !== NULL)
-                $size->setSizeTwo($value["size_three"]);
+            if($value["size_three"] !== "null")
+                $size->setSizeThree($value["size_three"]);
 
             $em->persist($size);
             $em->flush();
@@ -234,10 +234,6 @@ class AdminController extends FOSRestController
                 }
             }
         }
-
-
-
-
 
         return $this->render('admin/index.html.twig');
     }
@@ -298,14 +294,66 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Put("/updateOrderStatus", name="updateOrderStatus")
+     * @Rest\PUT("/updateOrderStatus/{id}", name="updateOrderStatus")
      * @Security("is_granted('ROLE_ADMIN')")
      */
-    public function updateOrderStatus(Request $request)
+    public function updateOrderStatus($id, Request $request)
     {
-        $order = new Orders();
         $em = $this->getDoctrine()->getManager();
         $order = $em->getRepository(Orders::class)->find($id);
 
+        if (!$order) {
+            throw $this->createNotFoundException(sprintf(
+                'No programmer found with nickname "%s"',
+                $id
+            ));
+        }
+
+        $status = $request->request->get('status', 0);
+
+        $order->setStatus($status);
+
+        $em->persist($order);
+        $em->flush();
+
+        $orders = $em->getRepository(Orders::class)->findAll();
+
+        return $this->render('Admin/orderList.html.twig', array("orders"=>$orders));
+    }
+
+    /**
+     * @Rest\PUT("/updateProductInfo/{id}", name="updateProductInfo")
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function updateProductInfo($id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $product = $em->getRepository(Product::class)->find($id);
+
+        if (!$product) {
+            throw $this->createNotFoundException(sprintf(
+                'No programmer found with nickname "%s"',
+                $id
+            ));
+        }
+
+        if($request->request->get('Brand', 0) !== 0)
+            $product->setBrand($request->request->get('Brand', 0));
+
+        if($request->request->get('Origin', 0) !== 0)
+            $product->setOrigin($request->request->get('Origin', 0));
+
+        if($request->request->get('Materials', 0) !== 0)
+            $product->setMaterials($request->request->get('Materials', 0));
+
+        if($request->request->get('Description', 0) !== 0)
+            $product->setDescription($request->request->get('Description', 0));
+
+
+        $em->persist($product);
+        $em->flush();
+
+
+        return $this->redirect($this->generateUrl('main'));
     }
 }

@@ -40,13 +40,7 @@
         <!-- The Modal -->
         <div id="myModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modalHead">
-                    <div class="close">&times;</div>
-                </div>
-                <div class="modalBox" id="modalBox">
-
-                </div>
+            <div id="modal-content" class="modal-content">
             </div>
 
         </div>
@@ -78,19 +72,26 @@
 
 {% block javascripts %}
     <script>
-        $(".prWindow").mouseover(function(){
-            hoverOne(this.id.replace("prWid",""));
-            return false;
-        });
 
-        $(".prWindow").mouseout(function(){
-            hoverOne(this.id.replace("prWid",""));
-            return false;
-        });
 
         $(document).ready(function(){
+            $(".prWindow").mouseover(function(){
+                hoverOne(this.id.replace("prWid",""));
+                return false;
+            });
+
+            $(".prWindow").mouseout(function(){
+                hoverOne(this.id.replace("prWid",""));
+                return false;
+            });
+
             $(".prWindow").click(function(){
                 openModal(this.id.replace("prWid",""));
+                return false;
+            });
+
+            $("#editProductButton").click(function(){
+
                 return false;
             });
 /*
@@ -114,6 +115,20 @@
             $('main').on("click", "#clearCart", function () {
                 clearCart();
             });
+
+            $('.modal').on("click", ".close", function () {
+                modal.style.display = "none";
+            });
+
+            $('.modal').on("click", ".editFieldButton", function () {
+                editFieldButton(this.value, this.id);
+            });
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
 
         });
 
@@ -215,7 +230,7 @@
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("modalBox").innerHTML = this.responseText;
+                    document.getElementById("modal-content").innerHTML = this.responseText;
                 }
             };
 
@@ -231,13 +246,13 @@
 
             if(id === null || productName === null || quantity === null || size === null || color === null || price === null)
             {
-
+                addToCartError();
             }else {
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
-                        count.innerHTML = +count.innerHTML + +1;
                         addToCartSuccessMsg(id);
+                        count.innerHTML = +count.innerHTML + +1;
                     }
                 };
                 var url = "{{ path('addToCart', {'id':'idJS', 'product': 'productJS','quantity': 'quantityJS', 'size': 'sizeJS', 'color':'colorJS', 'price':'priceJS'})|escape('js') }}";
@@ -258,11 +273,55 @@
 
         }
 
+        function editFieldButton(productId, name){
+            var currentValue = document.getElementsByClassName('mPr'+name)[0].innerHTML;
+            if (currentValue.includes("<input") === false){
+                document.getElementsByClassName('mPr'+name)[0].innerHTML = "<input id='originInput' type='text' placeholder='"+ currentValue +"'/>";
+                document.getElementById(name).innerHTML = "Update";
+
+            }else{
+                 updateProductField(productId, name, document.getElementById('originInput').value)
+            }
+        }
+
+        function updateProductField(id, name, fieldValue) {
+
+            let vars = name+"="+fieldValue;
+
+            var xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementsByClassName('mPr'+name)[0].innerHTML = fieldValue;
+                    document.getElementById(name).innerHTML = "Edit";
+
+                    if(name === "Brand"){
+                        document.getElementById('brandLink').innerHTML = fieldValue;
+                    }
+                }
+            };
+
+            var url = "{{ path('updateProductInfo', {'id': 'idJS'}) }}";
+
+            url = url.replace("idJS", id);
+
+            xhttp.open("PUT", url, false);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send(vars);
+        }
+
         function addToCartSuccessMsg(id){
             var successMsg = document.getElementById("successfullyAdded"+id);
 
             successMsg.style.display = "block";
             setTimeout(function(){successMsg.style.display = "none"},3000)
+        }
+
+        function addToCartError(){
+            var errormsg = document.getElementById("addToCartError");
+
+            errormsg.style.display = "block";
+            setTimeout(function(){errormsg.style.display = "none"},3000)
         }
 
         function updateCart(){
@@ -345,16 +404,6 @@
 
         }
 
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
 
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
     </script>
 {% endblock %}

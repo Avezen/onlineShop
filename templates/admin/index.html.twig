@@ -31,10 +31,12 @@
                         Zamówienia
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ path('orders', {'status':'Zapłacone'}) }}">Zapłacone</a>
                         <a class="dropdown-item" href="{{ path('orders', {'status':'Niezapłacone'}) }}">Niezapłacone</a>
+                        <a class="dropdown-item" href="{{ path('orders', {'status':'Zapłacone'}) }}">Zapłacone</a>
+                        <a class="dropdown-item" href="{{ path('orders', {'status':'Przygotowane do wysyłki'}) }}">Przygotowane do wysyłki</a>
+                        <a class="dropdown-item" href="{{ path('orders', {'status':'Wysłane'}) }}">Wysłane</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Wysłane</a>
+                        <a class="dropdown-item" href="{{ path('adminpanel') }}">Wszystkie</a>
                     </div>
                 </li>
 
@@ -46,6 +48,7 @@
 
 {% endblock %}
 <div class="shopppingCart" id="shoppingCart"></div>
+    <div class="test2"></div>
 
 {% block body %}{% endblock %}
 </main>

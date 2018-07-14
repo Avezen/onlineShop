@@ -219,7 +219,7 @@ class Product
         return $this;
     }
 
-    public function getReview(): ?Review
+    public function getReview(): ?Collection
     {
         return $this->Review;
     }

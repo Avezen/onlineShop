@@ -16,7 +16,8 @@
         {% set ixs = 1 %}
         Rozmiar: XS<br><br>
         Długość 1: {{ app.session.get('sizes').XS.size_one }}<br>
-        Długość 2: {{ app.session.get('sizes').XS.size_two }}<br><br>
+        Długość 2: {{ app.session.get('sizes').XS.size_two }}<br>
+        Długość 3: {{ app.session.get('sizes').XS.size_three }}<br><br>
         {% for color in colors.XS %}
         Kolor {{ ixs }}:{{ color }}<br>
 
@@ -30,6 +31,7 @@
         Rozmiar: S<br>
         Długość 1: {{ app.session.get('sizes').S.size_one }}<br>
         Długość 2: {{ app.session.get('sizes').S.size_two }}<br>
+        Długość 3: {{ app.session.get('sizes').S.size_three }}<br><br>
         {% for color in colors.S %}
             Kolor {{ iss }}:{{ color }}<br>
             <br>
@@ -42,7 +44,8 @@
         {% set im = 1 %}
         Rozmiar: M<br><br>
         Długość 1: {{ app.session.get('sizes').M.size_one }}<br>
-        Długość 2: {{ app.session.get('sizes').M.size_two }}<br><br>
+        Długość 2: {{ app.session.get('sizes').M.size_two }}<br>
+        Długość 3: {{ app.session.get('sizes').M.size_three }}<br><br>
         {% for color in colors.M %}
            Kolor {{ im }}: {{ color }}<br>
             <br>
@@ -55,7 +58,8 @@
         {% set il = 1 %}
         Rozmiar: L<br><br>
         Długość 1: {{ app.session.get('sizes').L.size_one }}<br>
-        Długość 2: {{ app.session.get('sizes').L.size_two }}<br><br>
+        Długość 2: {{ app.session.get('sizes').L.size_two }}<br>
+        Długość 3: {{ app.session.get('sizes').L.size_three }}<br><br>
         {% for color in colors.L %}
             Kolor{{ il }}:{{ color }}<br>
             <br>
@@ -68,7 +72,8 @@
         {% set ixl = 1 %}
         Rozmiar: XL<br><br>
         Długość 1: {{ app.session.get('sizes').XL.size_one }}<br>
-        Długość 2: {{ app.session.get('sizes').XL.size_two }}<br><br>
+        Długość 2: {{ app.session.get('sizes').XL.size_two }}<br>
+        Długość 3: {{ app.session.get('sizes').XL.size_three }}<br><br>
         {% for color in colors.XL %}
             Kolor {{ ixl }}:{{ color }}<br>
             {% set ixl = ixl + 1 %}
@@ -80,7 +85,8 @@
         {% set ixxl = 1 %}
         Rozmiar: XXL<br><br>
         Długość 1: {{ app.session.get('sizes').XXL.size_one }}<br>
-        Długość 2: {{ app.session.get('sizes').XXL.size_two }}<br><br>
+        Długość 2: {{ app.session.get('sizes').XXL.size_two }}<br>
+        Długość 3: {{ app.session.get('sizes').XXL.size_three }}<br><br>
         {% for color in colors.XXL %}
             Kolor{{ ixxl }}:{{ color }}<br>
             <br>

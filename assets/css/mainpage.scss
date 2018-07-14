@@ -9,7 +9,7 @@ header{
   z-index: 6;
   background-color: white;
   width:100%;
-  height: 112px;
+  height: 100px;
   max-width: 1200px;
 }
 
@@ -80,6 +80,7 @@ nav {
   #navbarSupportedContent{
     width:100%;
     margin-left:5%;
+    padding-bottom:20px
   }
 
   #navbarSupportedContent li {
@@ -154,7 +155,6 @@ nav {
 .nav-underline{
   margin-left: auto;
   margin-right: auto;
-  margin-top: 10px;
   margin-bottom: 50px;
   width: 100%;
   border-bottom: solid 2px $maincolor;

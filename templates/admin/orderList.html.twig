@@ -15,33 +15,38 @@
 
              <tr>
                  <td>{{ order.id }}</td>
-                 <td>{{ order.status }}</td>
+                 <td id="status{{ order.id }}">{{ order.status }}</td>
                  <td><button onclick="showProductDetails({{ order.id }})" id="showProductDetails{{ order.id }}">pokaż szegóły</button>
 
                  </td>
                  <td>{{ order.address.streetnr }}</td>
                  <td>{{ order.packageMethod.method }}</td>
-                 <td>
+                 <td id="changeStatus{{ order.id }}">
                      {% if order.status == "Niezapłacone" %}
-                     <select>
-                         <option value="volvo">Zapłacone</option>
-                         <option value="saab">Przygotowane do wysyłki</option>
-                         <option value="mercedes">Wysłane</option>
-                     </select>
+                         <select id="selectStatus{{ order.id }}">
+                             <option value="option1" >Zapłacone</option>
+                             <option value="option2">Przygotowane do wysyłki</option>
+                             <option value="option3">Wysłane</option>
+                         </select>
+                         <button type="button" value="{{ order.id }}" class="patchOrderStatus">Uaktualnij</button>
                      {% elseif order.status == "Zapłacone" %}
-                         <select>
-                             <option value="volvo">Przygotowane do wysyłki</option>
-                             <option value="saab">Wysłane</option>
-                             <option value="audi">Niezapłacone</option>
+                         <select id="selectStatus{{ order.id }}">
+                             <option value="option1" >Przygotowane do wysyłki</option>
+                             <option value="option2">Wysłane</option>
+                             <option value="option3">Niezapłacone</option>
                          </select>
+                         <button type="button" value="{{ order.id }}" class="patchOrderStatus">Uaktualnij</button>
                      {% elseif order.status == "Przygotowane do wysyłki" %}
-                         <select>
-                             <option value="volvo">Wysłane</option>
-                             <option value="saab">Niezapłacone</option>
-                             <option value="mercedes">Zapłacone</option>
+                         <select id="selectStatus{{ order.id }}">
+                             <option value="option1" >Wysłane</option>
+                             <option value="option2">Niezapłacone</option>
+                             <option value="option3">Zapłacone</option>
                          </select>
+                         <button type="button" value="{{ order.id }}" class="patchOrderStatus">Uaktualnij</button>
+                     {% elseif order.status == "Wysłane" %}
+                         Zakończono
                      {% endif %}
-                     <button type="button" id="patchOrderStatus">Uaktualnij</button>
+
                      <div id="test"></div>
                  </td>
              </tr>
@@ -82,12 +87,56 @@
             return false;
         });
 
-        $('#patchOrderStatus').click(function(){
-            patchOrderStatus();
+        $('.patchOrderStatus').click(function(){
+            putOrderStatus(this.value);
             return false;
         });
 
-        function patchOrderStatus() {
+
+
+        function putOrderStatus(id) {
+            var selector = document.getElementById('selectStatus'+id);
+            var selectedStatus = selector[selector.selectedIndex].text;
+
+            let vars = "status="+selectedStatus;
+
+            var xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    if(selectedStatus === "Wysłane"){
+                        document.getElementById("status"+id).innerHTML = selectedStatus;
+                        document.getElementById("changeStatus"+id).innerHTML = "Zakończono";
+                    }else{
+                        document.getElementById("status"+id).innerHTML = selectedStatus;
+
+                        if(selectedStatus === "Niezapłacone"){
+                            document.querySelector('td#changeStatus'+id+' option[value=option1]').text = "Zapłacone";
+                            document.querySelector('td#changeStatus'+id+' option[value=option2]').text = "Przygotowane do wysyłki";
+                            document.querySelector('td#changeStatus'+id+' option[value=option3]').text = "Wysłane";
+                        }
+                        if(selectedStatus === "Zapłacone"){
+                            document.querySelector('td#changeStatus'+id+' option[value=option1]').text = "Przygotowane do wysyłki";
+                            document.querySelector('td#changeStatus'+id+' option[value=option2]').text = "Wysłane";
+                            document.querySelector('td#changeStatus'+id+' option[value=option3]').text = "Niezapłacone";
+                        }
+                        else if(selectedStatus === "Przygotowane do wysyłki"){
+                            document.querySelector('td#changeStatus'+id+' option[value=option1]').text = "Wysłane";
+                            document.querySelector('td#changeStatus'+id+' option[value=option2]').text = "Niezapłacone";
+                            document.querySelector('td#changeStatus'+id+' option[value=option3]').text = "Zapłacone";
+                        }
+
+                    }
+                }
+            };
+
+            var url = "{{ path('updateOrderStatus', {'id': 'idJS'}) }}";
+
+            url = url.replace("idJS", id);
+
+            xhttp.open("PUT", url, false);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send(vars);
 
         }
 

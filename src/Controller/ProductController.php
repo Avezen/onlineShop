@@ -69,12 +69,7 @@ class ProductController extends FOSRestController
         if ($product === null) {
             return new View("Product id: " . $id . " doesn't exist", Response::HTTP_NOT_FOUND);
         }else{
-            return $this->render('product/product.html.twig', array(
-                'product' => $product,
-                'productReviews' => $productReviews,
-                'productSizes' => $productSizes,
-                'productColors' => $productColors
-                ));
+            return $this->render('product/product.html.twig', array('product'=>$product));
         }
     }
 
