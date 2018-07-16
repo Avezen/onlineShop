@@ -294,7 +294,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\PUT("/updateOrderStatus/{id}", name="updateOrderStatus")
+     * @Rest\Put("/updateOrderStatus/{id}", name="updateOrderStatus")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function updateOrderStatus($id, Request $request)
@@ -322,7 +322,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\PUT("/updateProductInfo/{id}", name="updateProductInfo")
+     * @Rest\Put("/updateProductInfo/{id}", name="updateProductInfo")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function updateProductInfo($id, Request $request)
