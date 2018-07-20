@@ -88,7 +88,7 @@ class ProductController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("products/category/{category}", name="productsCategory")
+     * @Rest\Get("/category/{category}", name="productsCategory")
      */
     public function getProductsByCategory(Request $request, $category)
     {
@@ -108,7 +108,7 @@ class ProductController extends FOSRestController
         if ($product === null) {
             return new View("Product category: ".$category." doesn't exist", Response::HTTP_NOT_FOUND);
         }else{
-            return $this->render('product/index.html.twig', array('products' => $pagination));
+            return $this->render('product/index.html.twig', array('products' => $pagination, 'category'=>$category));
         }
     }
 

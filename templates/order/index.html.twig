@@ -125,7 +125,20 @@
         });
     });
 
+    function clearCart(){
+        var cart = document.getElementById('shoppingCart');
+        var cartItemsCount = document.getElementById('cartCount');
 
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                cart.innerHTML = this.responseText;
+                cartItemsCount.innerHTML = "0";
+            }
+        };
+        xhttp.open("GET", "{{ path('clearCart') }}", false);
+        xhttp.send();
+    }
 
 
     function showOptions(name, id) {
@@ -256,7 +269,6 @@
 
         for(var i = 0; i<finalizeRadios.length; i++){
             if(finalizeRadios[i].checked === true && finalizeRadios[i].value == 0){
-                document.getElementById('finishStep').innerHTML = "Udało się! Zamówienie zostanie zrealizowane.";
                 var xhttp = new XMLHttpRequest();
                 // Create some variables we need to send to our PHP file
                 var url = "{{ path('finalizeOrder') }}";
@@ -266,14 +278,16 @@
 
                 xhttp.onreadystatechange = function() {
                     if(xhttp.readyState == 4 && xhttp.status == 200) {
-
+                        document.getElementById('finishStep').innerHTML = "Udało się! Zamówienie zostanie zrealizowane.";
+                        clearCart();
                     }
-                }
+                };
                 xhttp.send();
 
                 for(var j = 0; j<stepButtons.length; j++){
                     stepButtons[j].disabled = true;
                 }
+                break;
             }else{
                 document.getElementById('finishStep').innerHTML = "Transakcja nie przyjęta."
             }

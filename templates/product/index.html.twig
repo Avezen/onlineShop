@@ -12,12 +12,13 @@
             <!-- Full-width images with number and caption text -->
             <div class="mySlides fading" style="display: block;">
                 <div class="numbertext">1 / 2</div>
-                <img src="{{ asset('photos/1.jpg') }}" style="width:100%"><div class="text">Caption Text</div>
+                <img src="{{ asset('photos/1.jpg') }}" style="width:100%">
+                <div class="text">Caption Text</div>
             </div>
             <div class="mySlides fading">
                 <div class="numbertext">2 / 2</div>
                 <img src="{{ asset('photos/2.jpg') }}" style="width:100%">
-                <div class="text">Caption Two</div>
+                <div class="text">Caption Text</div>
             </div>
 
             <!-- Next and previous buttons -->
@@ -34,7 +35,13 @@
         </div>
         <div class="page-title">
             <div class="line"></div>
-            <label class="label"> NOWOŚCI </label>
+            <label class="label">
+                {% if category is not defined %}
+                    Nowości
+                {% else %}
+                    {{ category }}
+                {% endif %}
+            </label>
             <div class="line"></div>
         </div>
         <!-- The Modal -->

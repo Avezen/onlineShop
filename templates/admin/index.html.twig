@@ -26,6 +26,9 @@
                 <li>
                     <a class="nav-bar-text-button" href="{{ path('addProductForm') }}">Dodaj produkt</a>
                 </li>
+                <li>
+                    <a class="nav-bar-text-button" href="{{ path('addDelivery') }}">Dodaj sposób wysyłki</a>
+                </li>
                 <li class="nav-item dropdown" style="border-right: solid 0px">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Zamówienia
@@ -69,8 +72,6 @@
             login();
             return false;
         });
-
-
     });
 
     function addNewProduct() {
@@ -88,6 +89,8 @@
             xhttp.send();
         }
     }
+
+
 
 
 

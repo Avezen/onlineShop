@@ -66,9 +66,17 @@
                         <div>
                             {{ size.color }}
                         </div>
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <button class="editFieldButton" id="deleteColorFromProduct" value="{{ size.color }}">x</button>
+                        {% endif %}
                     </label>
+
                 {% endfor %}
+                {% if is_granted("ROLE_ADMIN") %}
+                    <button class="editFieldButton" id="addColorToProduct" value="{{ sizes.id }}">Dodaj Kolor</button>
+                {% endif %}
             {% endfor %}
+
         </div>
         <br>
         <input type="number" id="quantityOf{{ product.id }}" value="1">

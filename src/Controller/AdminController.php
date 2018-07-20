@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Order\DeliveryMethod;
 use App\Entity\Order\Orders;
+use App\Entity\Order\PackageMethod;
 use App\Entity\Product\Product;
 use App\Entity\Product\Color;
 use App\Entity\Product\Review;
@@ -187,6 +189,15 @@ class AdminController extends FOSRestController
     }
 
     /**
+     * @Rest\Get("/addDelivery", name="addDelivery")
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function addDelivery(){
+
+        return $this->render('Admin/addDeliveryMethod.html.twig');
+    }
+
+    /**
      * @Rest\Post("/addnewproduct", name="addnewproduct")
      * @Security("is_granted('ROLE_ADMIN')")
      */
@@ -236,6 +247,51 @@ class AdminController extends FOSRestController
         }
 
         return $this->render('admin/index.html.twig');
+    }
+
+    /**
+     * @Rest\Post("/adddeliverymethod", name="adddeliverymethod")
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function addDeliveryMethod(Request $request)
+    {
+        $deliveryMethods = $request->request->get('deliveryMethod', 0);
+
+        $em = $this->getDoctrine()->getManager();
+        $deliveryId = null;
+
+        for($i=0; $i<count($deliveryMethods); $i++) {
+
+            $checkDeliveryExistence = $em->getRepository(DeliveryMethod::class)->findOneBy(array("Name"=>$deliveryMethods[$i]['name']));
+
+            if($checkDeliveryExistence !== null){
+                $deliveryId = $checkDeliveryExistence->getId();
+                $deliveryMethod = $checkDeliveryExistence;
+            }else {
+                $deliveryMethod = new DeliveryMethod();
+                $deliveryMethod->setName($deliveryMethods[$i]['name']);
+
+                $em->persist($deliveryMethod);
+                $em->flush();
+            }
+            for($j=0; $j<count($deliveryMethods[$i])-1; $j++){
+
+                $checkPackageExistence = $em->getRepository(PackageMethod::class)->findBy(array("DeliveryMethod"=>$deliveryId, "Method"=>$deliveryMethods[$i][$j]['method']));
+
+                if($checkPackageExistence !== []){
+
+                }else{
+                    $packageMethod = new PackageMethod();
+                    $packageMethod->setDeliveryMethod($deliveryMethod);
+                    $packageMethod->setMethod($deliveryMethods[$i][$j]['method']);
+                    $packageMethod->setPrice($deliveryMethods[$i][$j]['price']);
+
+                    $em->persist($packageMethod);
+                    $em->flush();
+                }
+            }
+        }
+        return $this->redirect($this->generateUrl('adminpanel'));
     }
 
     /**
