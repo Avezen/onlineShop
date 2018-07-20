@@ -13,9 +13,13 @@
             Rozmiar:{{ shoppingCartItem.size }}<br>
             {{ shoppingCartItem.color }}<br>
             {{ shoppingCartItem.price*shoppingCartItem.quantity }}<br>
+            <br>
+            <button id="deleteItemFromCart" value="{{ i }}">Usuń</button>
+            <br>
+            <br>
         </div>
-        <button id="deleteItemFromCart" value="{{ i }}">Usuń</button>
-        <br><br>
+
+        <br>
         {% set i = i + 1 %}
     {% endfor %}
     <br>

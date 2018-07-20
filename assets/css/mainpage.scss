@@ -1,5 +1,7 @@
-html{
+@import url(https://fonts.googleapis.com/css?family=Quicksand);
 
+html *{
+  font-family: 'Quicksand', sans-serif ;
 }
 
 $maincolor: deepskyblue;
@@ -175,11 +177,13 @@ nav {
   }
 
   .label{
+    font-size:24px;
     text-align: center;
     margin: 1%;
-    margin-top: 30px;
+    margin-top: 20px;
     float: left;
     width: 18%;
+    font-weight: bold;
   }
 }
 
@@ -311,7 +315,7 @@ nav {
   margin: 8px 0 8px 0;
   overflow: hidden;
   position: relative;
-  border: solid 1px black;
+  border: solid 1px $maincolor;
   width: auto;
   height: 400px;
 }
@@ -319,6 +323,8 @@ nav {
 .prTitle{
   width: 100%;
   text-align:center;
+  font-size:24px;
+  color: $maincolor;
 }
 
 .prPrice {
@@ -338,6 +344,10 @@ nav {
   border:solid 1px $maincolor;
   width: 200px;
   padding: 10px;
+}
+
+.cartItem{
+  border-bottom: solid 1px grey;
 }
 
 .order{
