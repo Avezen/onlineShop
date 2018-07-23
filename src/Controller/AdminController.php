@@ -24,6 +24,33 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class AdminController extends FOSRestController
 {
     /**
+     * @Rest\Get("/getusers/", name="getUsers")
+     * @Security("is_granted('ROLE_ADMIN')")
+     *
+     */
+    public function getUsers(){
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository(User::class)->findAll();
+
+        return $this->render('Admin/userList.html.twig', array("users"=>$users));
+    }
+
+    /**
+     * @Rest\Get("/deleteuser/{id}", name="deleteUser")
+     * @Security("is_granted('ROLE_ADMIN')")
+     *
+     */
+    public function deleteUser($id){
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+
+        $em->remove($user);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('getUsers'));
+    }
+
+    /**
      * @Rest\Get("/setproductinfo/{name}/{description}/{category}/{price}/{photo}/{brand}/{sex}/{origin}/{materials}", name="setproductinfo")
      * @Security("is_granted('ROLE_ADMIN')")
      *
