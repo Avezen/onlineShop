@@ -21,6 +21,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 class OrderController extends FOSRestController
@@ -29,8 +30,6 @@ class OrderController extends FOSRestController
      * @Rest\Get("/makingOrder", name="makingOrder")
      */
     public function makeOrder(Request $request){
-        // Tutaj ma być pobranie danych z sesji na temat wózka, na podstawie których wyślemy requesty po szczegóły o produktach
-        // i przekazemy tablice z tymi danymi do render()
         $session = new Session();
 
         $cart = $session->get('shoppingCart');
@@ -72,20 +71,20 @@ class OrderController extends FOSRestController
     /**
      * @Rest\Get("/testMethod", name="testMethod")
      */
-    public function testMethod(){
+    public function testMethod(Request $request){
         $packageMethods = $this->getDoctrine()->getRepository(PackageMethod::class)->findAll();
         $deliveryMethods = $this->getDoctrine()->getRepository(DeliveryMethod::class)->findAll();
 
 
 
 
-        return $this->render('order/test.html.twig', array("deliveryMethods"=>$deliveryMethods));
+        return array("deliveryMethods"=>$this->container->get('request_stack')->getMasterRequest()->getClientIp());
     }
 
     /**
      * @Rest\Post("/setAddress", name="setAddress")
      */
-    public function setAddress(Request $request){
+    public function setAddress(ValidatorInterface $validator, Request $request){
         $session = new Session();
         $deliveryMethods = new DeliveryMethod();
 
@@ -111,6 +110,18 @@ class OrderController extends FOSRestController
         $data->setCity($city);
         $data->setStreetNr($streetNr);
 
+        $errors = $validator->validate($data);
+
+        if (count($errors) > 0) {
+            /*
+             * Uses a __toString method on the $errors variable which is a
+             * ConstraintViolationList object. This gives us a nice string
+             * for debugging.
+             */
+            $errorsString = (string) $errors;
+
+            return new View("NULL VALUES ARE NOT ALLOWED", Response::HTTP_NOT_ACCEPTABLE);
+        }
 
 
         $session->set('address', $data);

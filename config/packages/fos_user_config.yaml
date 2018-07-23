@@ -3,5 +3,14 @@ fos_user:
     firewall_name: main
     user_class: App\Entity\User
     from_email:
-        address: "maciejborzymowski1@gmail.com"
-        sender_name: "admin"
+            address:        'maciejborzymowski1@gmail.com'
+            sender_name:    'Demo Registration'
+    registration:
+            confirmation:
+                template:   '@FOSUser/Registration/email.txt.twig'
+                enabled:    true
+                from_email:
+                        address:        'maciejborzymowski1@gmail.com'
+                        sender_name:    'Demo Registration'
+    service:
+            mailer: fos_user.mailer.twig_swift

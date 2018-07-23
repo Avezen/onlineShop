@@ -59,87 +59,31 @@
                                 <a class="nav-bar-circle-button" id="showCart" href=""><i class="fa fa-cart-arrow-down"></i></a>
                             </div>
                             <div class="login-form" id="loginform" style="display: none"></div>
-                        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+
                             <div class="circle" style="margin-right: 20px" >
                                 <a class="nav-bar-circle-button" id="login" href=""><i style="padding-left: 5px" class="fa fa-user-o"></i></a>
                             </div>
-                        {% else %}
-                            <div class="circle" style="margin-right: 20px" >
-                                <a class="nav-bar-circle-button" id="login" href=""><i style="padding-left: 5px" class="fa fa-user-o"></i></a>
-                            </div>
-                        {% endif %}
+
 
                     </div>
                 </nav>
 
                 <div id="underline" class="nav-underline"></div>
-
-
-
-                <!--
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="{{ path('main') }}">Main Page</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">Nowości <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Najpopularniejsze</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Kategorie
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ path('productsCategory', {'category':'T-Shirt'}) }}">T-Shirt</a>
-                                    <a class="dropdown-item" href="{{ path('productsCategory', {'category':'Hoodie'}) }}">Hoodie</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ path('productsCategory', {'category':'Spódnica'}) }}">Spódnica</a>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link disabled" href="#">Disabled</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="showCart">Koszyk <div id="cartCount">
-                                        {{ app.session.get('shoppingCart')|length }}  </div></a>
-                            </li>
-
-                            {% if is_granted("ROLE_ADMIN") %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('adminpanel') }}" >Panel Admina</a>
-                                </li>
-                            {% endif %}
-                            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-                                <a href="{{ path('fos_user_security_logout') }}">
-                                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-                                </a>
-                            {% else %}
-                                <li class="nav-item">
-                                    <a class="nav-link login" id="login">Zaloguj się</a>
-                                </li>
-                            {% endif %}
-                            <div id="loginform" style="display: none"></div>
-                        </ul>
-
-                    </div>
-                </nav>
-                -->
             </header>
         {% endblock %}
 
         {% block body %}
 
         {% endblock %}
-            <div class="shopppingCart" id="shoppingCart"></div>
+            <div class="shopppingCart" id="shoppingCart" style="display: none;"></div>
             </div>
 
+            <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div id="modal-content" class="modal-content">
+                </div>
+
+            </div>
          </main>
         </body>
         {% block footer %}{% endblock %}
@@ -149,7 +93,7 @@
         <script>
             $(document).ready(function() {
                 $("#showCart").click(function () {
-                    myFunction();
+                    showShoppingCart();
                     return false;
                 });
 
@@ -158,6 +102,10 @@
                     return false;
                 });
 
+                $('#loginform').on("click", "#getRegisterForm", function () {
+                    showShoppingCart();
+                    return false;
+                });
 
             });
 
@@ -178,6 +126,24 @@
                 }
             }
 
+            function getRegisterForm() {
+                const xhttp = new XMLHttpRequest();
+                var registerform = document.getElementById('modal-content');
+                if (registerform.style.display === "none") {
+                    if (registerform.innerHTML === "") {
+
+                        xhttp.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+                                registerform.innerHTML = this.responseText ;
+
+                            }
+                        };
+                        xhttp.open("GET", {{ path('fos_user_registration_register') }}, true);
+                        xhttp.send();
+                    }
+                }
+            }
+
 
             function login(){
                 const xhttp = new XMLHttpRequest();
@@ -186,11 +152,11 @@
                     if(loginform.innerHTML === ""){
                         xhttp.onreadystatechange = function () {
                             if (this.readyState == 4 && this.status == 200) {
-                                loginform.innerHTML = this.responseText;
+                                loginform.innerHTML = this.responseText ;
 
                             }
                         };
-                        xhttp.open("GET", {{ path('fos_user_security_login') }}, false);
+                        xhttp.open("GET", {{ path('fos_user_security_login') }}, true);
                         xhttp.send();
                     }
                     document.getElementById('login').style.display="none";
@@ -205,17 +171,17 @@
             function showShoppingCart(){
                 var cart = document.getElementById('shoppingCart');
 
-
                 if (cart.style.display === 'none') {
-                    cart.style.display = 'block';
+
                     if (cart.innerHTML === "") {
                         var xhttp = new XMLHttpRequest();
                         xhttp.onreadystatechange = function () {
                             if (this.readyState == 4 && this.status == 200) {
                                 cart.innerHTML = this.responseText;
+                                cart.style.display = 'block';
                             }
                         };
-                        xhttp.open("GET", {{ path('shoppingCart') }}, false);
+                        xhttp.open("GET", {{ path('shoppingCart') }}, true);
                         xhttp.send();
                     }
                 } else {

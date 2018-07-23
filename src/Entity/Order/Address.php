@@ -3,6 +3,7 @@
 namespace App\Entity\Order;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AddressRepository")
@@ -28,11 +29,13 @@ class Address
 
     /**
      * @ORM\Column(type="string", length=12)
+     *
      */
     private $PostalCode;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank(message="address.City.not_blank")
      */
     private $City;
 

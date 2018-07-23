@@ -197,7 +197,7 @@
 
                         }
                     };
-                    xhttp.open("GET", "{{ path('fos_user_security_login') }}", false);
+                    xhttp.open("GET", "{{ path('fos_user_security_login') }}", true);
                     xhttp.send();
                 }
                 loginform.style.display = "block";
@@ -219,7 +219,7 @@
                             cart.innerHTML = this.responseText;
                         }
                     };
-                    xhttp.open("GET", "{{ path('shoppingCart') }}", false);
+                    xhttp.open("GET", "{{ path('shoppingCart') }}", true);
                     xhttp.send();
                 }
             } else {
@@ -233,6 +233,7 @@
 
         function openModal(id) {
             var url = "{{ path('product', { 'id': 'idJS' }) }}";
+            document.getElementById("modal-content").innerHTML = "";
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
@@ -243,7 +244,7 @@
 
             url = url.replace("idJS", id);
 
-            xhttp.open("GET", url, false);
+            xhttp.open("GET", url, true);
             xhttp.send();
             modal.style.display = "block";
         }
