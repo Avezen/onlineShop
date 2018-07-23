@@ -1,0 +1,26 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block body %}
+<table>
+    <tr>
+        <td>Id</td>
+        <td>Username</td>
+        <td>Email address</td>
+        <td>Role</td>
+        <td>Options</td>
+    </tr>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                {% for role in user.roles %}
+                    {{ role }}
+                {% endfor %}
+            </td>
+            <td><button id="deleteUser">Delete</button></td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

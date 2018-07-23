@@ -23,7 +23,7 @@
             <header id="header">
 
                 <div class="header-background"></div>
-                <nav class="navbar navbar-expand-lg" id="navbarExpandLg">
+                <nav class="navbar navbar-expand-lg" id="navbarExpandLg" style="padding-left: 5%;">
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fa fa-reorder"></i>
@@ -49,7 +49,7 @@
                             </li>
                             {% if is_granted("ROLE_ADMIN") %}
                                 <li style="border-left: solid 1px deepskyblue; border-right: solid 0px; margin-left:-5px; padding-left:10px">
-                                    <a class="nav-bar-text-button" href="{{ path('adminpanel') }}" >Panel Admina</a>
+                                    <a class="nav-bar-text-button" href="{{ path('adminPanel') }}" >Panel Admina</a>
                                 </li>
                             {% endif %}
                         </ul>
@@ -58,10 +58,13 @@
                             <div class="circle">
                                 <a class="nav-bar-circle-button" id="showCart" href=""><i class="fa fa-cart-arrow-down"></i></a>
                             </div>
-                            <div class="login-form" id="loginform" style="display: none"></div>
+                            <div class="login-form" id="loginform" style="display: none">
+                                <a class="nav-bar-circle-button" id="login" href="">Zaloguj się</a>
+                                <a class="nav-bar-circle-button" id="login" href="">Zaloguj się</a>
+                            </div>
 
                             <div class="circle" style="margin-right: 20px" >
-                                <a class="nav-bar-circle-button" id="login" href=""><i style="padding-left: 5px" class="fa fa-user-o"></i></a>
+                                <a class="nav-bar-circle-button" id="userPanel" href=""><i style="padding-left: 5px" class="fa fa-user-o"></i></a>
                             </div>
 
 
@@ -99,6 +102,11 @@
 
                 $("#login").click(function () {
                     login();
+                    return false;
+                });
+
+                $("#userPanel").click(function () {
+                    userPanel();
                     return false;
                 });
 
@@ -141,6 +149,17 @@
                         xhttp.open("GET", {{ path('fos_user_registration_register') }}, true);
                         xhttp.send();
                     }
+                }
+            }
+
+            function userPanel(){
+                var panel = document.getElementById('loginform');
+
+                if(panel.style.display === "none") {
+                    panel.style.display = "block";
+                }
+                else {
+                    panel.style.display = "none";
                 }
             }
 

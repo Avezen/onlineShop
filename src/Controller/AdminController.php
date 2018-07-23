@@ -10,6 +10,7 @@ use App\Entity\Product\Color;
 use App\Entity\Product\Review;
 use App\Entity\Product\Size;
 
+use App\Entity\User;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,9 +21,38 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class AdminController extends FOSRestController
 {
+
+    /**
+     * @Rest\Get("/getusers/", name="getUsers")
+     * @Security("is_granted('ROLE_ADMIN')")
+     *
+     */
+    public function getUsers(){
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository(User::class)->findAll();
+
+        return $this->render('Admin/userList.html.twig', array("users"=>$users));
+    }
+
+    /**
+     * @Rest\Get("/deleteuser/{id}", name="deleteUser")
+     * @Security("is_granted('ROLE_ADMIN')")
+     *
+     */
+    public function deleteUser($id){
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+
+        $em->remove($user);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('getUsers'));
+    }
+
     /**
      * @Rest\Get("/setproductinfo/{name}/{description}/{category}/{price}/{photo}/{brand}/{sex}/{origin}/{materials}", name="setproductinfo")
      * @Security("is_granted('ROLE_ADMIN')")
@@ -114,7 +144,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/setproductcolors/{sizeXS}/{sizeS}/{sizeM}/{sizeL}/{sizeXL}/{sizeXXL}", name="setproductcolors")
+     * @Rest\Get("/setproductcolors/{sizeXS}/{sizeS}/{sizeM}/{sizeL}/{sizeXL}/{sizeXXL}", name="setProductColors")
      * @Security("is_granted('ROLE_ADMIN')")
      *
      */
@@ -180,7 +210,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/addProductForm", name="addProductForm")
+     * @Rest\Get("/addproductform", name="addProductForm")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function addProductForm(){
@@ -189,7 +219,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/addDelivery", name="addDelivery")
+     * @Rest\Get("/adddelivery", name="addDelivery")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function addDelivery(){
@@ -198,7 +228,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("/addnewproduct", name="addnewproduct")
+     * @Rest\Post("/addnewproduct", name="addNewProduct")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function addNewProduct(){
@@ -250,7 +280,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("/adddeliverymethod", name="adddeliverymethod")
+     * @Rest\Post("/adddeliverymethod", name="addDeliveryMethod")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function addDeliveryMethod(Request $request)
@@ -295,7 +325,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/adminpanel", name="adminpanel")
+     * @Rest\Get("/adminpanel", name="adminPanel")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function admin(){
@@ -315,7 +345,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("deleteProduct/", name="deleteProduct")
+     * @Rest\Post("deleteproduct/", name="deleteProduct")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function deleteProduct(Request $request)
@@ -350,7 +380,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Put("/updateOrderStatus/{id}", name="updateOrderStatus")
+     * @Rest\Put("/updateprderptatus/{id}", name="updateOrderStatus")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function updateOrderStatus($id, Request $request)
@@ -378,7 +408,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Put("/updateProductInfo/{id}", name="updateProductInfo")
+     * @Rest\Put("/updateproductinfo/{id}", name="updateProductInfo")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function updateProductInfo($id, Request $request)
