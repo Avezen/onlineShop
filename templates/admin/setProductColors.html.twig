@@ -1,9 +1,0 @@
-<form id="setProductColorsForm" method="GET">
-    {% for key,size in sizes %}
-        <div class="sizeColors" id="{{ key }}Colors">
-            Rozmiar: {{ key }}<br>
-            <button class="addColor" id="buttonColor{{ key }}" value="{{ key }}" type="button">Dodaj Kolor</button>
-        </div>
-    {% endfor %}
-    <button type="submit">Dalej</button>
-</form>
