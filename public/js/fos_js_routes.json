@@ -1,1 +1,0 @@
-{"base_url":"","routes":{"shoppingCart":{"tokens":[["text","\/shoppingCart"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":["GET"],"schemes":[]}},"prefix":"","host":"http://127.0.0.1:8000/","scheme":"http"}
