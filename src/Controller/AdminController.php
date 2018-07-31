@@ -387,7 +387,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Put("/updateprderptatus/{id}", name="update_order_status")
+     * @Rest\Put("/updateorderstatus/{id}", name="update_order_status")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function updateOrderStatus($id, Request $request)
