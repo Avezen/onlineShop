@@ -24,10 +24,10 @@
                     <a class="nav-bar-text-button" href="{{ path('main') }}">Strona główna</a>
                 </li>
                 <li>
-                    <a class="nav-bar-text-button" href="{{ path('addProductForm') }}">Dodaj produkt</a>
+                    <a class="nav-bar-text-button" href="{{ path('add_product_form') }}">Dodaj produkt</a>
                 </li>
                 <li>
-                    <a class="nav-bar-text-button" href="{{ path('addDelivery') }}">Dodaj sposób wysyłki</a>
+                    <a class="nav-bar-text-button" href="{{ path('add_delivery') }}">Dodaj sposób wysyłki</a>
                 </li>
                 <li class="nav-item dropdown" >
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -43,7 +43,7 @@
                     </div>
                 </li>
                 <li style="border-right: solid 0px">
-                    <a class="nav-bar-text-button" href="{{ path('getUsers') }}">Zarządzaj użytkownikami</a>
+                    <a class="nav-bar-text-button" href="{{ path('get_users') }}">Zarządzaj użytkownikami</a>
                 </li>
             </ul>
         </div>
@@ -87,7 +87,7 @@
                     main[0].innerHTML = this.responseText;
                 }
             };
-            xhttp.open("GET", "{{ path('addProductForm') }}", false);
+            xhttp.open("GET", "{{ path('add_product_form') }}", false);
             xhttp.send();
         }
     }

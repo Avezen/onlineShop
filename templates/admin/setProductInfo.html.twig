@@ -99,7 +99,7 @@
             var btn = document.getElementById('sizesButton');
 
             if(!isNaN(price) && isFinite(price)){
-                var url = "{{ path('setProductInfo',
+                var url = "{{ path('set_product_info',
                     {
                         'name': 'nameJS',
                         'description':'descriptionJS',
@@ -173,7 +173,7 @@
             // Create some variables we need to send to our PHP file
             var btn = document.getElementById('colorsButton');
 
-            var url = "{{ path('setProductSizes',
+            var url = "{{ path('set_product_sizes',
                 {
                     'sizeXS': 'size1JS',
                     'XSvalue1':'size1value1JS',
@@ -304,7 +304,7 @@
 
             var btn = document.getElementById('finishButton');
 
-            var url = "{{ path('setProductColors',
+            var url = "{{ path('set_product_colors',
                 {
                     'sizeXS': 'sizeXSJS',
                     'sizeS': 'sizeSJS',
