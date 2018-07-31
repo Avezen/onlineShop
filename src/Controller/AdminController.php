@@ -61,7 +61,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/setproductinfo/{name}/{description}/{category}/{price}/{photo}/{brand}/{sex}/{origin}/{materials}", name="setproductinfo")
+     * @Rest\Get("/setproductinfo/{name}/{description}/{category}/{price}/{photo}/{brand}/{sex}/{origin}/{materials}", name="setProductInfo")
      * @Security("is_granted('ROLE_ADMIN')")
      *
      */
