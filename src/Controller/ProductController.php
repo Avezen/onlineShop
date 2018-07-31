@@ -26,7 +26,9 @@ class ProductController extends FOSRestController
      */
     public function getProducts(Request $request)
     {
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+        $em = $this->getDoctrine()->getManager();
+
+        $products = $em->getRepository(Product::class)->findAll();
 
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(

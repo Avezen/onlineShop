@@ -11,6 +11,7 @@ use App\Entity\Product\Review;
 use App\Entity\Product\Size;
 
 use App\Entity\User;
+use Doctrine\DBAL\ConnectionException;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,7 +34,13 @@ class AdminController extends FOSRestController
      */
     public function getUsers(){
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository(User::class)->findAll();
+
+        try{
+            $users = $em->getRepository(User::class)->findAll();
+        }catch (ConnectionException $connectionException){
+            return $connectionException;
+        }
+
 
         return $this->render('Admin/userList.html.twig', array("users"=>$users));
     }
