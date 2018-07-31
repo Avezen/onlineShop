@@ -55,7 +55,7 @@
         {% for product in products %}
             <div id="prWid{{ product.id }}" class="prWindow" >
                 {% if is_granted("ROLE_ADMIN") %}
-                    <form id="deleteProduct" method="POST" action="{{ path('deleteProduct') }}">
+                    <form id="deleteProduct" method="POST" action="{{ path('delete_product') }}">
                         <input hidden name="productIdToDelete" value="{{ product.id }}"/>
                         <button onclick="event.stopPropagation()">x</button>
                     </form>
@@ -310,7 +310,7 @@
                 }
             };
 
-            var url = "{{ path('updateProductInfo', {'id': 'idJS'}) }}";
+            var url = "{{ path('update_product_info', {'id': 'idJS'}) }}";
 
             url = url.replace("idJS", id);
 
