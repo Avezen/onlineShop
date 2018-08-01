@@ -59,7 +59,7 @@
                                 <a class="nav-bar-circle-button" id="showCart" href=""><i class="fa fa-cart-arrow-down"></i></a>
                             </div>
                             <div class="login-form" id="loginform" style="display: none">
-cos
+
                             </div>
 
                             <div class="circle" style="margin-right: 20px" >
@@ -74,6 +74,13 @@ cos
             </header>
         {% endblock %}
             <div id="js-notes-wrapper"></div>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+
+            {% else %}
+                Zaloguj się jako admin: <br>
+                Login: maciej<br>
+                Haslo: maciej<br>
+            {% endif %}
         {% block body %}
 
         {% endblock %}
