@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class CartController extends FOSRestController
 {
     /**
-     * @Rest\Get("/addtocart/{id}/{product}/{quantity}/{size}/{color}/{price}", name="addToCart")
+     * @Rest\Get("/addtocart/{id}/{product}/{quantity}/{size}/{color}/{price}", name="add_to_cart")
      */
     public function addToCart($id, $product, $quantity, $size, $color, $price){
         $session = new Session();
@@ -42,7 +42,7 @@ class CartController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/shoppingCart", name="shoppingCart", options={"expose"=true})
+     * @Rest\Get("/shoppingCart", name="shopping_cart", options={"expose"=true})
      */
     public function readCart(Request $request){
         $session = new Session();
@@ -53,7 +53,7 @@ class CartController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/shoppingCart/clear", name="clearCart")
+     * @Rest\Get("/shoppingCart/clear", name="clear_cart")
      */
     public function clearCart(){
         $session = new Session();
@@ -67,7 +67,7 @@ class CartController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/shoppingCart/delete/{id}", name="deleteItemFromCart")
+     * @Rest\Get("/shoppingCart/delete/{id}", name="delete_item_from_cart")
      */
     public function deleteFromCart($id){
         $session = new Session();

@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class OrderController extends FOSRestController
 {
     /**
-     * @Rest\Get("/makingOrder", name="makingOrder")
+     * @Rest\Get("/makingOrder", name="making_order")
      */
     public function makeOrder(Request $request){
         $session = new Session();
@@ -82,7 +82,7 @@ class OrderController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("/setAddress", name="setAddress")
+     * @Rest\Post("/setAddress", name="set_address")
      */
     public function setAddress(ValidatorInterface $validator, Request $request){
         $session = new Session();
@@ -132,7 +132,7 @@ class OrderController extends FOSRestController
 
 
     /**
-     * @Rest\Get("/setDeliveryMethod/{packageMethod}", name="setDeliveryMethod")
+     * @Rest\Get("/setDeliveryMethod/{packageMethod}", name="set_delivery_method")
      */
     public function setDeliveryMethod($packageMethod){
         $session = new Session();
@@ -145,7 +145,7 @@ class OrderController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/setPaymentMethod/{paymentMethod}", name="setPaymentMethod")
+     * @Rest\Get("/setPaymentMethod/{paymentMethod}", name="set_payment_method")
      */
     public function setPaymentMethod($paymentMethod){
         $session = new Session();
@@ -157,7 +157,7 @@ class OrderController extends FOSRestController
     }
 
     /**
-    * @Rest\Post("/finalizeOrder", name="finalizeOrder")
+    * @Rest\Post("/finalizeOrder", name="finalize_order")
     */
     public function finalizeOrder(){
         $session = new Session();

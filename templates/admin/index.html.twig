@@ -53,7 +53,6 @@
 
 {% endblock %}
 <div class="shopppingCart" id="shoppingCart"></div>
-    <div class="test2"></div>
 
 {% block body %}{% endblock %}
 </main>
@@ -130,7 +129,7 @@
                         cart.innerHTML = this.responseText;
                     }
                 };
-                xhttp.open("GET", "{{ path('shoppingCart') }}", false);
+                xhttp.open("GET", "{{ path('shopping_cart') }}", false);
                 xhttp.send();
             }
         } else {

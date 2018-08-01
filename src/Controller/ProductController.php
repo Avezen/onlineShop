@@ -26,9 +26,7 @@ class ProductController extends FOSRestController
      */
     public function getProducts(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $products = $em->getRepository(Product::class)->findAll();
+        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
 
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
@@ -76,7 +74,7 @@ class ProductController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("products/brand/{brand}", name="productsBrand")
+     * @Rest\Get("products/brand/{brand}", name="products_brand")
      */
     public function getProductsByBrand($brand)
     {
@@ -90,7 +88,7 @@ class ProductController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/category/{category}", name="productsCategory")
+     * @Rest\Get("/category/{category}", name="products_category")
      */
     public function getProductsByCategory(Request $request, $category)
     {
@@ -115,7 +113,7 @@ class ProductController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("products/category/{category}/{brand}", name="productsCategoryBrand")
+     * @Rest\Get("products/category/{category}/{brand}", name="products_category_brand")
      */
     public function getProductsByCategoryAndBrand(Request $request, $category, $brand)
     {
@@ -143,7 +141,7 @@ class ProductController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("products/{id}/reviews", name="productReviews")
+     * @Rest\Get("products/{id}/reviews", name="product_reviews")
      */
     public function getProductReviews()
     {

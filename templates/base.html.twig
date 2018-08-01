@@ -41,8 +41,8 @@
                                     Kategorie
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ path('productsCategory', {'category':'T-Shirt'}) }}">T-shirt</a>
-                                    <a class="dropdown-item" href="{{ path('productsCategory', {'category':'Hoodie'}) }}">Hoodie</a>
+                                    <a class="dropdown-item" href="{{ path('products_category', {'category':'T-Shirt'}) }}">T-shirt</a>
+                                    <a class="dropdown-item" href="{{ path('products_category', {'category':'Hoodie'}) }}">Hoodie</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ path('main') }}">Wszystkie</a>
                                 </div>
@@ -59,8 +59,7 @@
                                 <a class="nav-bar-circle-button" id="showCart" href=""><i class="fa fa-cart-arrow-down"></i></a>
                             </div>
                             <div class="login-form" id="loginform" style="display: none">
-                                <a class="nav-bar-circle-button" id="login" href="">Zaloguj się</a>
-                                <a class="nav-bar-circle-button" id="login" href="">Zaloguj się</a>
+cos
                             </div>
 
                             <div class="circle" style="margin-right: 20px" >
@@ -74,7 +73,7 @@
                 <div id="underline" class="nav-underline"></div>
             </header>
         {% endblock %}
-
+            <div id="js-notes-wrapper"></div>
         {% block body %}
 
         {% endblock %}

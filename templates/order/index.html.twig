@@ -136,7 +136,7 @@
                 cartItemsCount.innerHTML = "0";
             }
         };
-        xhttp.open("GET", "{{ path('clearCart') }}", false);
+        xhttp.open("GET", "{{ path('clear_cart') }}", false);
         xhttp.send();
     }
 
@@ -176,7 +176,7 @@
         // Create our XMLHttpRequest object
         var xhttp = new XMLHttpRequest();
         // Create some variables we need to send to our PHP file
-        var url = "{{ path('setAddress') }}";
+        var url = "{{ path('set_address') }}";
         var country = document.getElementById("country").value;
         var postal = document.getElementById("postalcode").value;
         var city = document.getElementById("city").value;
@@ -225,7 +225,7 @@
                 document.getElementById('deliveryStep').style.display = "none";
             }
         };
-        var url = "{{ path('setDeliveryMethod', {'packageMethod': 'packageMethodJS'}) }}";
+        var url = "{{ path('set_delivery_method', {'packageMethod': 'packageMethodJS'}) }}";
         url = url.replace("packageMethodJS", packageMethod);
 
         xhttp.open("GET", url, false);
@@ -255,7 +255,7 @@
                 document.getElementById('paymentStep').style.display = "none";
             }
         };
-        var url = "{{ path('setPaymentMethod', {'paymentMethod': 'paymentMethodJS'}) }}";
+        var url = "{{ path('set_payment_method', {'paymentMethod': 'paymentMethodJS'}) }}";
         url = url.replace("paymentMethodJS", card);
 
         xhttp.open("GET", url, false);
@@ -271,7 +271,7 @@
             if(finalizeRadios[i].checked === true && finalizeRadios[i].value == 0){
                 var xhttp = new XMLHttpRequest();
                 // Create some variables we need to send to our PHP file
-                var url = "{{ path('finalizeOrder') }}";
+                var url = "{{ path('finalize_order') }}";
 
                 xhttp.open("POST", url, true);
                 xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

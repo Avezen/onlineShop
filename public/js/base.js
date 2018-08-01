@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    login();
+
     $("#showCart").click(function () {
         showShoppingCart();
         return false;
@@ -71,46 +73,44 @@ function userPanel(){
 function login(){
     const xhttp = new XMLHttpRequest();
     var loginform = document.getElementById('loginform');
-    if(loginform.style.display === "none"){
-        if(loginform.innerHTML === ""){
+
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     loginform.innerHTML = this.responseText ;
-
                 }
             };
             xhttp.open("GET", "{{ path('fos_user_security_login') }}", true);
             xhttp.send();
-        }
+
         document.getElementById('login').style.display="none";
-        loginform.style.display = "block";
-    }else{
-        loginform.style.display = "none";
-    }
+
+
 }
-
-
 
 function showShoppingCart(){
     var cart = document.getElementById('shoppingCart');
 
     if (cart.style.display === 'none') {
-
+        cart.style.display = 'block';
         if (cart.innerHTML === "") {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     cart.innerHTML = this.responseText;
-                    cart.style.display = 'block';
                 }
             };
-            xhttp.open("GET", "{{ path('shoppingCart') }}", true);
+            xhttp.open("GET", "{{ path('shopping_cart') }}", true);
             xhttp.send();
         }
+
+
+
     } else {
         cart.style.display = 'none';
     }
 }
+
+
 
 var slideIndex = 1;
 showSlides(slideIndex);

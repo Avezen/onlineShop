@@ -11,7 +11,6 @@ use App\Entity\Product\Review;
 use App\Entity\Product\Size;
 
 use App\Entity\User;
-use Doctrine\DBAL\ConnectionException;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,13 +33,7 @@ class AdminController extends FOSRestController
      */
     public function getUsers(){
         $em = $this->getDoctrine()->getManager();
-
-        try{
-            $users = $em->getRepository(User::class)->findAll();
-        }catch (ConnectionException $connectionException){
-            return $connectionException;
-        }
-
+        $users = $em->getRepository(User::class)->findAll();
 
         return $this->render('Admin/userList.html.twig', array("users"=>$users));
     }
@@ -328,7 +321,7 @@ class AdminController extends FOSRestController
                 }
             }
         }
-        return $this->redirect($this->generateUrl('adminpanel'));
+        return $this->redirect($this->generateUrl('admin_panel'));
     }
 
     /**
@@ -387,7 +380,7 @@ class AdminController extends FOSRestController
     }
 
     /**
-     * @Rest\Put("/updateorderstatus/{id}", name="update_order_status")
+     * @Rest\Put("/updateprderptatus/{id}", name="update_order_status")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function updateOrderStatus($id, Request $request)
